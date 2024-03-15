@@ -10,7 +10,8 @@ public enum EventType
     EnemyAI, // pass BaseEnemy object
     AllyAI, // pass BasePlayer object
     CombatWin,
-    CombatLoss, 
+    CombatLoss,
+    DelpResponse  // pass DELPResponse object
 };
 
 /// <summary>

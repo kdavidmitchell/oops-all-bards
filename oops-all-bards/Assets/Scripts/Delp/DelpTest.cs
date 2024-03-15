@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DELP;
 
 public class DELPTest : MonoBehaviour
 {
     [SerializeField] private DELPEntity entity;
     private Queue<DELPMessage> preparedData = new Queue<DELPMessage>();
-    private bool queried = false;
+    public bool finished = false;
 
     void Start()
     {
@@ -19,11 +20,9 @@ public class DELPTest : MonoBehaviour
         {
             DELPMessage msg = preparedData.Dequeue();
             TCPTestClient.Instance.SendMessage<DELPMessage>(msg);
-        } else if (preparedData.Count == 0 && queried == false)
+        } else if (preparedData.Count == 0 && finished == false)
         {
-            DELPMessage msg = PrepareQuery();
-            TCPTestClient.Instance.SendMessage<DELPMessage>(msg);
-            queried = true;
+            finished = true;
         }
     }
 
@@ -31,7 +30,7 @@ public class DELPTest : MonoBehaviour
     {
         foreach (string fact in entity.Facts)
         {
-            DelpBelief belief = new DelpBelief(fact);
+            DELPBelief belief = new DELPBelief(fact);
             string data = JsonUtility.ToJson(belief);
             DELPMessage msg = new DELPMessage(0, "delp", data);
             preparedData.Enqueue(msg);
@@ -39,7 +38,7 @@ public class DELPTest : MonoBehaviour
 
         foreach (string srule in entity.StrictRules)
         {
-            DelpBelief belief = new DelpBelief(srule);
+            DELPBelief belief = new DELPBelief(srule);
             string data = JsonUtility.ToJson(belief);
             DELPMessage msg = new DELPMessage(1, "delp", data);
             preparedData.Enqueue(msg);
@@ -47,7 +46,7 @@ public class DELPTest : MonoBehaviour
 
         foreach (string drule in entity.DefeasibleRules)
         {
-            DelpBelief belief = new DelpBelief(drule);
+            DELPBelief belief = new DELPBelief(drule);
             string data = JsonUtility.ToJson(belief);
             DELPMessage msg = new DELPMessage(2, "delp", data);
             preparedData.Enqueue(msg);
@@ -56,31 +55,8 @@ public class DELPTest : MonoBehaviour
 
     private DELPMessage PrepareQuery()
     {
-        DelpQuery query = new DelpQuery("Penguin(opus)");
-        string data = JsonUtility.ToJson(query);
-        DELPMessage msg = new DELPMessage(4, "delp", data);
+        DELPQuery query = new DELPQuery("Penguin(opus)");
+        DELPMessage msg = query.PrepareQuery();
         return msg;
-    }
-}
-
-[System.Serializable]
-public class DelpBelief
-{
-    [SerializeField] public string belief;
-
-    public DelpBelief(string belief)
-    {
-        this.belief = belief;
-    }
-}
-
-[System.Serializable]
-public class DelpQuery
-{
-    [SerializeField] public string query;
-
-    public DelpQuery(string query)
-    {
-        this.query = query;
     }
 }
