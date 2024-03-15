@@ -55,9 +55,11 @@ public class Message {
 		if (this.code == 4)
 		{
 			String query = (String) this.data.get("query");
-			String answer = handler.query(query);
-			System.out.println("KB queried: " + query);
-			System.out.println("Answer: " + answer);
+			JSONObject data = new JSONObject();
+			data.put("answer", handler.query(query));
+			Message toSend = new Message(4, query, data);
+			JSONObject jo = toSend.toJSON();
+			TCPServer.getInstance().sendOutgoingMessage(jo);
 		} else {
 			String belief = (String) this.data.get("belief");
 			handler.addBelief(belief);

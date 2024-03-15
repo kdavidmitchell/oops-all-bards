@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using UnityEngine;
+using DELP;
 
 public class TCPTestClient : MonoBehaviour {  	
 	#region private members 	
@@ -67,6 +68,15 @@ public class TCPTestClient : MonoBehaviour {
 
 						// TODO: ADD MROE DOCS
 						string result = System.Text.Encoding.UTF8.GetString(incomingData);
+						Debug.Log(result);
+						
+						if (result.Contains("answer"))
+						{
+							DELPResponse answer = JsonUtility.FromJson<DELPResponse>(result);
+							EventManager.Instance.InvokeEvent(EventType.DelpResponse, answer);
+							return;
+						}
+
 						ABLResponse response = JsonUtility.FromJson<ABLResponse>(result);
 						ActionManager.Instance.ParseData(response);
 					} 				
