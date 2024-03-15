@@ -249,8 +249,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b2985428c9134c4c984f6f3edf631ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  supertasks: []
-  test: {fileID: 1411478681}
+  bindings: {fileID: 1216771529}
+  currentSupertask:
+    name: 
+    behaviors: []
+    actingCharacter: 0
+  simulateCif: 1
 --- !u!4 &319780884
 Transform:
   m_ObjectHideFlags: 0
@@ -449,7 +453,7 @@ GameObject:
   - component: {fileID: 1216771530}
   - component: {fileID: 1216771529}
   m_Layer: 0
-  m_Name: SupertaskBindings
+  m_Name: VivBindings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -467,9 +471,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2804414017d49e4ca938b5edec2c088, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bindings:
-  - key: 
-    val: []
+  supertaskBindings:
+  - key: SabotagePlayer
+    val:
+    - DuelPlayer
+    - RefuseHelp
+  behaviorBindings:
+  - key: DuelPlayer
+    val:
+    - StrongerThan
+    - ~InCombat
+  - key: RefuseHelp
+    val:
+    - InParty
+    - InCombat
 --- !u!4 &1216771530
 Transform:
   m_ObjectHideFlags: 0
