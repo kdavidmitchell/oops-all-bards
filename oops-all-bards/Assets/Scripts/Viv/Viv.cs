@@ -67,6 +67,10 @@ namespace Viv
         [SerializeField] private int actingCharacter;
         // The integer ID of the character targeted by the supertask.
         [SerializeField] private int targetCharacter;
+        // A boolean indicating whether or not the supertask is currently being carried out.
+        [SerializeField] private bool inProgress = false;
+        // The evaluation of the supertask in terms of its behaviors, containing the TFUs associated with each behavior.
+        [SerializeField] private TFU[] evaluation;
 
         public Supertask(string name, int actingCharacter, int targetCharacter, CustomDictionary bindings)
         {
@@ -90,6 +94,54 @@ namespace Viv
             return behaviors;
         }
 
+        // A function that dispatches all behaviors belonging to the supertask to the ABL agent.
+        private void DispatchBehaviors()
+        {
+            
+        }
+
+        // A function that evaluates the given supertask with respect to its component behaviors.
+        private void Evaluate()
+        {
+            if (this.evaluation == null)
+            {
+                // Create a new evaluation matrix, m x n, where m = the number of the behaviors belonging to the supertask, and n = 3 (storing truths, falsities, and uncertainties of the behavior).
+                this.evaluation = new TFU[behaviors.Count];
+            }
+
+            // Evaluate each behavior.
+            for (int i = 0; i < behaviors.Count; i++)
+            {
+                Behavior currentBehavior = behaviors[i];
+                currentBehavior.Evaluate();
+                evaluation[i] = ScoreBehavior(currentBehavior);
+            }
+        }
+
+        // A utility function used to count the number of truths (YES), falsities (NO), and uncertainties (UNDECIDED) belonging to each behavior.
+        private TFU ScoreBehavior(Behavior behavior)
+        {
+            TFU score = new TFU();
+            string[] eval = behavior.Evaluation;
+
+            for (int i = 0; i < eval.Length; i++)
+            {
+                string current = eval[i];
+                if (current == "YES")
+                {
+                    score.Truths += 1;
+                } else if (current == "NO")
+                {
+                    score.Falsities += 1;
+                } else
+                {
+                    score.Uncertainties += 1;
+                }
+            }
+
+            return score;
+        }
+
         public string Name
         {
             get { return this.name; }
@@ -98,6 +150,63 @@ namespace Viv
         public List<Behavior> Behaviors
         {
             get { return this.behaviors; }
+        }
+
+        public bool InProgress
+        {
+            get { return this.inProgress; }
+            set { this.inProgress = value; }
+        }
+
+        public TFU[] Evaluation
+        {
+            get { return this.evaluation; }
+        }
+    }
+
+    [System.Serializable]
+    public class TFU
+    {
+        [SerializeField] private int truths;
+        [SerializeField] private int falsities;
+        [SerializeField] private int uncertainties;
+
+        public TFU()
+        {
+            this.truths = 0;
+            this.falsities = 0;
+            this.uncertainties = 0;
+        } 
+
+        public TFU(int truths, int falsities, int uncertainties)
+        {
+            this.truths = truths;
+            this.falsities = falsities;
+            this.uncertainties = uncertainties;
+        }
+
+        public int[] ToArray()
+        {
+            int[] array = { this.truths, this.falsities, this.uncertainties };
+            return array;
+        }
+
+        public int Truths
+        {
+            get { return this.truths; }
+            set { this.truths = value; }
+        }
+
+        public int Falsities
+        {
+            get { return this.falsities; }
+            set { this.falsities = value; }
+        }
+
+        public int Uncertainties
+        {
+            get { return this.uncertainties; }
+            set { this.uncertainties = value; }
         }
     }
 
@@ -108,6 +217,9 @@ namespace Viv
         [SerializeField] private string name;
         // A list of the assumptions on which each behavior is built.
         [SerializeField] private List<Assumption> assumptions = new List<Assumption>();
+        // The evaluation of the behavior in terms of its assumptions, represented as an array of strings, i.e. ["YES","NO","UNDECIDED"].
+        [SerializeField] private string[] evaluation;
+
 
         public Behavior(string name, int actingCharacter, int targetCharacter, CustomDictionary bindings)
         {
@@ -131,6 +243,21 @@ namespace Viv
             return assumptions;
         }
 
+        // A function that evaluates the given behavior by validating/failing to validate the assumptions on which it is built.
+        public void Evaluate()
+        {
+            if (this.evaluation == null)
+            {
+                this.evaluation = new string[assumptions.Count];
+            }
+
+            for (int i = 0; i < assumptions.Count; i++)
+            {
+                assumptions[i].Validate();
+                evaluation[i] = assumptions[i].IsValid.ToString();
+            }
+        }
+
         public string Name
         {
             get { return this.name; }
@@ -139,6 +266,11 @@ namespace Viv
         public List<Assumption> Assumptions
         {
             get { return this.assumptions; }
+        }
+
+        public string[] Evaluation
+        {
+            get { return this.evaluation; }
         }
     }
 
@@ -154,7 +286,7 @@ namespace Viv
         // A temporary DELPResponse to store a returned message from the server.
         [SerializeField] private DELPResponse tmpResponse;
         // Whether or not the assumption holds true for the given owner, predicate, and subject.
-        enum Validity { DEFAULT, YES, NO, UNDECIDED };
+        public enum Validity { DEFAULT, YES, NO, UNDECIDED };
         [SerializeField] private Validity isValid;
 
         public Assumption()
@@ -217,6 +349,11 @@ namespace Viv
             }
 
             EventManager.Instance.UnsubscribeToEvent(EventType.DelpResponse, null);
+        }
+
+        public Validity IsValid
+        {
+            get { return this.isValid; }
         }
     }
 

@@ -250,10 +250,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bindings: {fileID: 1216771529}
+  characters: 
   currentSupertask:
     name: 
     behaviors: []
     actingCharacter: 0
+    targetCharacter: 0
+    inProgress: 0
   simulateCif: 1
 --- !u!4 &319780884
 Transform:
@@ -314,6 +317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6d472f1633154b49bd052ef42387fa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isClientOnly: 0
 --- !u!1 &920813814
 GameObject:
   m_ObjectHideFlags: 0

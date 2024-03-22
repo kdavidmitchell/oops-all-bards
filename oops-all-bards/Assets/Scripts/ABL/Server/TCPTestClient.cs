@@ -15,7 +15,8 @@ public class TCPTestClient : MonoBehaviour {
 	#endregion
 
 	private static TCPTestClient _instance;
-	public static TCPTestClient Instance => TCPTestClient._instance;  	
+	public static TCPTestClient Instance => TCPTestClient._instance;
+	[SerializeField] private bool isClientOnly;  	
 	
 	void Awake()
     {
@@ -26,7 +27,12 @@ public class TCPTestClient : MonoBehaviour {
         {
             Destroy(gameObject);
         }
-		ConnectToTcpServer();
+
+		if (!isClientOnly)
+		{
+			ConnectToTcpServer();
+		}
+
 		DontDestroyOnLoad(gameObject);
     }
 
