@@ -40,6 +40,7 @@ namespace Viv
         {
             Supertask testST = new Supertask("SabotagePlayer", 1, 0, bindings);
             DebugSupertask(testST);
+            testST.DispatchBehaviors();
         }
 
         private void DebugSupertask(Supertask st)
@@ -80,6 +81,12 @@ namespace Viv
             this.behaviors = this.FormBehaviors(name, bindings);
         }
 
+        private VivWME ToVivWME()
+        {
+            VivWME wme = new VivWME(actingCharacter);
+            return wme;
+        }
+
         // A utility function that assigns the list of behaviors associated with the supertask.
         private List<Behavior> FormBehaviors(string name, CustomDictionary bindings)
         {
@@ -95,9 +102,19 @@ namespace Viv
         }
 
         // A function that dispatches all behaviors belonging to the supertask to the ABL agent.
-        private void DispatchBehaviors()
+        public void DispatchBehaviors()
         {
-            
+            VivWME wme = this.ToVivWME();
+            string[] behaviors = new string[this.behaviors.Count];
+            for (int i = 0; i < this.behaviors.Count; i++)
+            {
+                behaviors[i] = this.behaviors[i].Name;
+            }
+            wme.ToSpawn = behaviors;
+            ABLMessage msg = wme.ToABLMessage();
+            TCPTestClient.Instance.SendMessage<ABLMessage>(msg);
+
+            this.inProgress = true;
         }
 
         // A function that evaluates the given supertask with respect to its component behaviors.
@@ -215,6 +232,8 @@ namespace Viv
     {
         // The name of the behavior (should match the name of the corresponding ABL behavior).
         [SerializeField] private string name;
+        // The integer ID of the acting character.
+        [SerializeField] private int actingCharacter;
         // A list of the assumptions on which each behavior is built.
         [SerializeField] private List<Assumption> assumptions = new List<Assumption>();
         // The evaluation of the behavior in terms of its assumptions, represented as an array of strings, i.e. ["YES","NO","UNDECIDED"].
@@ -224,6 +243,7 @@ namespace Viv
         public Behavior(string name, int actingCharacter, int targetCharacter, CustomDictionary bindings)
         {
             this.name = name;
+            this.actingCharacter = actingCharacter;
             this.assumptions = this.FormAssumptions(name, actingCharacter, targetCharacter, bindings);
         }
 
