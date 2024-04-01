@@ -128,10 +128,9 @@ public class TCPTestClient : MonoBehaviour {
 		string data = JsonUtility.ToJson(allyWME);
 		Debug.Log(data);
 		// Prepare the message for ABL.
-		ABLMessage message = new ABLMessage();
-		message.code = 1;
-		message.msg = "AllyWME";
-		message.data = data;
+		int code = 1;
+		string msg = "AllyWME";
+		ABLMessage message = new ABLMessage(code, msg, data);
 		// Return message object.
 		return message;
 	}

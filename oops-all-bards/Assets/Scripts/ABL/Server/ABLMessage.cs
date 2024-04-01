@@ -12,4 +12,11 @@ public class ABLMessage
     // The data represented as a string sent to the Java server.
     // This could be for example a JSON representation of an AllyWME.
     public string data;
+
+    public ABLMessage(int code, string msg, string data)
+    {
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
+    }
 }
