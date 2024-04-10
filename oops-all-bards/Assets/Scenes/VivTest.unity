@@ -257,6 +257,7 @@ MonoBehaviour:
     actingCharacter: 0
     targetCharacter: 0
     inProgress: 0
+    evaluation: []
   simulateCif: 1
 --- !u!4 &319780884
 Transform:
@@ -483,12 +484,13 @@ MonoBehaviour:
   behaviorBindings:
   - key: DuelPlayer
     val:
-    - StrongerThan
+    - StrongerThanPlayer
     - ~InCombat
   - key: RefuseHelp
     val:
     - InParty
     - InCombat
+    - CanHelp
 --- !u!4 &1216771530
 Transform:
   m_ObjectHideFlags: 0

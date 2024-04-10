@@ -11,10 +11,25 @@ namespace Viv
         [SerializeField] private CustomDictionary bindings;
         // A list of managed characters, using integer IDs.
         [SerializeField] private List<int> characters;
-        // The current supertask that Viv is managing, usually passed to it by CiF.
+        // The current supertask Viv is managing.
         [SerializeField] private Supertask currentSupertask;
         // Whether or not Viv should use simulated CiF input.
         [SerializeField] private bool simulateCif = true;
+        private static Viv _instance;
+	    public static Viv Instance => Viv._instance;
+
+        void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this;
+        } else if (_instance != null)
+        {
+            Destroy(gameObject);
+        }
+
+		DontDestroyOnLoad(gameObject);
+    } 
 
         void Start()
         {
@@ -29,6 +44,21 @@ namespace Viv
             
         }
 
+        private void InitiateSupertask(Supertask supertask)
+        {
+            supertask.InProgress = true;
+            this.currentSupertask = supertask;
+            EvaluateCurrentSupertask();
+        }
+
+        public void EvaluateCurrentSupertask()
+        {
+            if (this.currentSupertask != null)
+            {
+                this.currentSupertask.Evaluate();
+            }
+        }
+
         // A testing function that emulates CiF assigning a supertask for a given character.
         void SimulateCiFStart()
         {
@@ -39,8 +69,7 @@ namespace Viv
         void TestQuintonsRevenge()
         {
             Supertask testST = new Supertask("SabotagePlayer", 1, 0, bindings);
-            DebugSupertask(testST);
-            testST.DispatchBehaviors();
+            InitiateSupertask(testST);
         }
 
         private void DebugSupertask(Supertask st)
@@ -101,8 +130,8 @@ namespace Viv
             return behaviors;
         }
 
-        // A function that dispatches all behaviors belonging to the supertask to the ABL agent.
-        public void DispatchBehaviors()
+        // A function that dispatches all behaviors that are not built on false assumptions to the ABL agent.
+        public void DispatchAllBehaviors()
         {
             VivWME wme = this.ToVivWME();
             string[] behaviors = new string[this.behaviors.Count];
@@ -118,7 +147,7 @@ namespace Viv
         }
 
         // A function that evaluates the given supertask with respect to its component behaviors.
-        private void Evaluate()
+        public void Evaluate()
         {
             if (this.evaluation == null)
             {
