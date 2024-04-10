@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DELP;
+using Viv;
 
 [CreateAssetMenu]
 public class DELPEntity : ScriptableObject
@@ -105,6 +106,7 @@ public class DELPEntity : ScriptableObject
     {
         PrepareEntityData();
         UpdateKnowledgeBase();
+        Viv.Viv.Instance.EvaluateCurrentSupertask();
     }
 
     public void QueryKnowledgeBase(string query)
