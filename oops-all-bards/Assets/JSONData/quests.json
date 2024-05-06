@@ -8,18 +8,24 @@
             [
                 {
                     "id": 0,
-                    "npcTargetName": "Samaren",
+                    "npcTargetName": "ToTavern",
                     "complete": false,
                     "displayText": "Speak with the innkeep to get your bearings"
                 },
                 {
                     "id": 1,
+                    "npcTargetName": "Samaren",
+                    "complete": false,
+                    "displayText": "Speak with the innkeep to get your bearings"
+                },
+                {
+                    "id": 2,
                     "npcTargetName": "Quinton",
                     "complete": false,
                     "displayText": "Speak with Quinton about getting a gig"
                 },
                 {
-                    "id": 2,
+                    "id": 3,
                     "npcTargetName": "Quinton",
                     "complete": false,
                     "displayText": "Follow Quinton to the back room and get ready for the gig"
