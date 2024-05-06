@@ -5,13 +5,13 @@ using System;
 
 public enum EventType 
 {
+    DelpResponse,  // pass DELPResponse object
     CheckQueue,
-    AwaitPlayerInput, // pass BasePlayer object
-    EnemyAI, // pass BaseEnemy object
-    AllyAI, // pass BasePlayer object
-    CombatWin,
+    EnemyAI,
+    AllyAI,
+    AwaitPlayerInput,
     CombatLoss,
-    DelpResponse  // pass DELPResponse object
+    CombatWin
 };
 
 /// <summary>
