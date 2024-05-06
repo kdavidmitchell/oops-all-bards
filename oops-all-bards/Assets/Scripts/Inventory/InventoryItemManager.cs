@@ -77,7 +77,7 @@ public class InventoryItemManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.I)) //test key
+        if (Input.GetKeyDown(KeyCode.I) && !DialogueManager.Instance.dialogueUI.activeInHierarchy) //test key
         {
             toggleInventoryUI();
             if (playerInventoryUI.activeSelf) UpdateInventory();

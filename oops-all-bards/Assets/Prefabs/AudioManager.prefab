@@ -89,15 +89,15 @@ MonoBehaviour:
     audioSource: {fileID: 0}
     title: pianoattack1
     volume: 1
-    pitchLower: 1
-    pitchUpper: 1
+    pitchLower: 0.5
+    pitchUpper: 1.3
     loop: 0
   - clip: {fileID: 8300000, guid: 0b0c5cb41138e23408d627de5501c204, type: 3}
     audioSource: {fileID: 0}
     title: pianoattack2
     volume: 1
-    pitchLower: 1
-    pitchUpper: 1
+    pitchLower: 0.5
+    pitchUpper: 1.3
     loop: 0
   - clip: {fileID: 8300000, guid: bc899c19c6de3c743a8e22bdef53e346, type: 3}
     audioSource: {fileID: 0}

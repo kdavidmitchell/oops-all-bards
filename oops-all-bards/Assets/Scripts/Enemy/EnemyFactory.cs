@@ -93,6 +93,7 @@ public class EnemyFactory : MonoBehaviour
         enemyModel.name = enemyName + "Model";
         enemyModel.transform.position = enemyTransforms[enemyNumber].position;
         enemyModel.transform.localScale = new Vector3(2, 2, 2);
+        enemyModel.AddComponent<CombatAnimationManager>();
 
         enemyModel.transform.Rotate(new Vector3(0, -90, 0));
 
@@ -112,6 +113,7 @@ public class EnemyFactory : MonoBehaviour
         enemyModel.name = enemyName + "Model";
         enemyModel.transform.position = enemyTransforms[enemyNumber].position;
         enemyModel.transform.localScale = new Vector3(2, 2, 2);
+        enemyModel.AddComponent<CombatAnimationManager>();
 
         enemyModel.transform.Rotate(new Vector3(0, -90, 0));
 

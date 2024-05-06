@@ -28,7 +28,7 @@ public class PartyManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.B) && !DialogueManager.Instance.dialogueUI.activeInHierarchy)
         {
             RenderPartyUI();
             TogglePartyUI();

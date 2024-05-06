@@ -14,6 +14,14 @@ public class BaseAbility
 	[SerializeField] private int cost;
 	[SerializeField] private int currentRank;
 	[SerializeField] private int maxRank;
+	[Tooltip("Name of animator clip acting character of ability should play")]
+	[SerializeField] private string abilityAnimationClip;
+	[Tooltip("Name of animator clip target character of ability should play")]
+	[SerializeField] private string abilityReactionAnimationClip;
+	[Tooltip("Array of particle prefabs to be spawned and played during animation")]
+	[SerializeField] private string[] abilityAnimationParticles;
+	[Tooltip("Array of sound effects to be played during animation")]
+	[SerializeField] private string[] abilitySFX;
 
 	public enum AbilityTypes
 	{
@@ -96,4 +104,28 @@ public class BaseAbility
 		get { return this.maxRank; }
 		set { this.maxRank = value; }
 	}
+
+	public string AbilityAnimationClip
+    {
+		get { return this.abilityAnimationClip; }
+		set { this.abilityAnimationClip = value; }
+    }
+
+	public string AbilityReactionAnimationClip
+	{
+		get { return this.abilityReactionAnimationClip; }
+		set { this.abilityReactionAnimationClip = value; }
+	}
+
+	public string[] AbilityAnimationParticles
+    {
+		get { return this.abilityAnimationParticles; }
+        set { this.abilityAnimationParticles = value; }
+    }
+	
+	public string[] AbilitySFX
+    {
+		get { return this.abilitySFX; }
+		set { this.abilitySFX = value; }
+    }
 }

@@ -22,7 +22,7 @@ public class ShopInteractable : MonoBehaviour, IInteractable
     {
         if (triggering)
         {
-            if (Input.GetKeyDown(KeyCode.F))
+            if (Input.GetKeyDown(KeyCode.F) && !DialogueManager.Instance.dialogueUI.activeInHierarchy)
             {
                 Execute();
                 triggering = false;

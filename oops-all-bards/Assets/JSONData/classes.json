@@ -54,7 +54,11 @@
                     "damage": 3,
                     "cost": 0,
                     "currentRank": 1,
-                    "maxRank": 5
+                    "maxRank": 5,
+                    "abilityAnimationClip": "genericAttack",
+                    "abilityReactionAnimationClip": "genericTakeDamage",
+                    "abilityAnimationParticles": [ "genericAttackSwing", "genericAttackImpect" ],
+                    "abilitySFX":  ["pianoattack1"]
                 },
                 {
                     "name": "Defend",
@@ -76,7 +80,11 @@
                     "damage": 6,
                     "cost": 5,
                     "currentRank": 1,
-                    "maxRank": 5
+                    "maxRank": 5,
+                    "abilityAnimationClip": "genericAttack",
+                    "abilityReactionAnimationClip": "genericTakeDamage",
+                    "abilityAnimationParticles": [ "genericAttackSwing", "genericAttackImpect" ],
+                    "abilitySFX": [ "pianoattack2" ]
                 }
             ]
         },
@@ -133,7 +141,11 @@
                     "damage": 3,
                     "cost": 0,
                     "currentRank": 1,
-                    "maxRank": 5
+                    "maxRank": 5,
+                    "abilityAnimationClip": "genericAttack",
+                    "abilityReactionAnimationClip": "genericTakeDamage",
+                    "abilityAnimationParticles": [ "genericAttackSwing", "genericAttackImpect" ],
+                    "abilitySFX": [ "pianoattack1" ]
                 },
                 {
                     "name": "Defend",
@@ -155,7 +167,11 @@
                     "damage": 3,
                     "cost": 5,
                     "currentRank": 1,
-                    "maxRank": 5
+                    "maxRank": 5,
+                    "abilityAnimationClip": "genericBuff",
+                    "abilityReactionAnimationClip": "genericAfflicted",
+                    "abilityAnimationParticles": [ "genericAttackSwing", "genericAttackImpect" ],
+                    "abilitySFX": [ "guitarattack1" ]
                 }
             ]
         },
@@ -212,7 +228,11 @@
                     "damage": 3,
                     "cost": 0,
                     "currentRank": 1,
-                    "maxRank": 5
+                    "maxRank": 5,
+                    "abilityAnimationClip": "genericAttack",
+                    "abilityReactionAnimationClip": "genericTakeDamage",
+                    "abilityAnimationParticles": [ "genericAttackSwing", "genericAttackImpect" ],
+                    "abilitySFX": [ "pianoattack1" ]
                 },
                 {
                     "name": "Defend",
@@ -234,7 +254,11 @@
                     "damage": 2,
                     "cost": 5,
                     "currentRank": 1,
-                    "maxRank": 5
+                    "maxRank": 5,
+                    "abilityAnimationClip": "genericBuff",
+                    "abilityReactionAnimationClip": "genericAfflicted",
+                    "abilityAnimationParticles": [ "genericAttackSwing", "genericAttackImpect" ],
+                    "abilitySFX": [ "guitarattack1" ]
                 }
             ]
         },
@@ -291,7 +315,11 @@
                     "damage": 3,
                     "cost": 0,
                     "currentRank": 1,
-                    "maxRank": 5
+                    "maxRank": 5,
+                    "abilityAnimationClip": "genericAttack",
+                    "abilityReactionAnimationClip": "genericTakeDamage",
+                    "abilityAnimationParticles": [ "genericAttackSwing", "genericAttackImpect" ],
+                    "abilitySFX": [ "pianoattack1" ]
                 },
                 {
                     "name": "Defend",
@@ -313,7 +341,11 @@
                     "damage": 2,
                     "cost": 3,
                     "currentRank": 1,
-                    "maxRank": 5
+                    "maxRank": 5,
+                    "abilityAnimationClip": "genericBuff",
+                    "abilityReactionAnimationClip": "genericAfflicted",
+                    "abilityAnimationParticles": [ "genericAttackSwing", "genericAttackImpect" ],
+                    "abilitySFX": [ "guitarattack2" ]
                 }
             ]
         }
