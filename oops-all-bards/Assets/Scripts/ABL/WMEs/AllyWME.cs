@@ -7,9 +7,9 @@ public class AllyWME
 {
     // General statistics
     [SerializeField] public int id;
-    // [SerializeField] public float locationX;
-    // [SerializeField] public float locationY;
-    // [SerializeField] public float locationZ;
+    [SerializeField] public float locationX;
+    [SerializeField] public float locationY;
+    [SerializeField] public float locationZ;
     [SerializeField] public bool inCombat;
 
     // Combat statistics
@@ -32,9 +32,9 @@ public class AllyWME
     {
         this.id = player.ID;
         // TODO: When we have 3D movement of player/allies, this will become important.
-        // this.locationX = player.locationX;
-        // this.locationY = player.locationY;
-        // this.locationZ = player.locationZ;
+        this.locationX = player.LocationX;
+        this.locationY = player.LocationY;
+        this.locationZ = player.LocationZ;
         this.inCombat = PartyManager.Instance.inCombat;
         this.health = player.Health;
         this.flourish = player.Flourish;

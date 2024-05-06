@@ -125,6 +125,7 @@ public class TavernManager : MonoBehaviour
         DialogueManager.Instance.speakerName = data.speakerName;
         DialogueManager.Instance.nodeText = data.nodeText;
         DialogueManager.Instance.nodeContentOrganizer = data.nodeContentOrganizer;
+       
     }
 
     public void AssignPartyUIToManager()

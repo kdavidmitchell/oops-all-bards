@@ -42,11 +42,11 @@ public class GameAgent_BehaviorFactories {
                __$behaviorFrame[0] = (AllyWME)__$args[0];
                __$behaviorFrame[1] = new __ValueTypes.IntVar();
 
-            final __StepDesc[] __$steps = {new __StepDesc(8, GameAgent.__$stepFactory0_rfield), new __StepDesc(9, GameAgent.__$stepFactory0_rfield), new __StepDesc(10, GameAgent.__$stepFactory0_rfield)};
-            return new ParallelBehaviorDebug(__$parentGoal, null, null, null, null, false, __$signature, (short)0, 3, __$behaviorFrame, __$steps, 3, __$behaviorDesc);
+            final __StepDesc[] __$steps = {new __StepDesc(8, GameAgent.__$stepFactory0_rfield), new __StepDesc(9, GameAgent.__$stepFactory0_rfield), new __StepDesc(10, GameAgent.__$stepFactory0_rfield), new __StepDesc(11, GameAgent.__$stepFactory0_rfield)};
+            return new ParallelBehaviorDebug(__$parentGoal, null, null, null, null, false, __$signature, (short)0, 3, __$behaviorFrame, __$steps, 4, __$behaviorDesc);
          }
          case 5: {
-            // manageCombat-4->ConditionalStep11_IF_FailStep_1
+            // manageCombat-4->ConditionalStep12_IF_FailStep_1
                final Object[] __$behaviorFrame = __$args;
 
             final __StepDesc[] __$steps = {new __StepDesc(-2, GameAgent.__$stepFactory0_rfield)};
@@ -57,7 +57,7 @@ public class GameAgent_BehaviorFactories {
                final Object[] __$behaviorFrame = new Object[1];
                __$behaviorFrame[0] = new __ValueTypes.IntVar((Integer)__$args[0]);
 
-            final __StepDesc[] __$steps = {new __StepDesc(11, GameAgent.__$stepFactory0_rfield), new __StepDesc(12, GameAgent.__$stepFactory0_rfield), new __StepDesc(13, GameAgent.__$stepFactory0_rfield), new __StepDesc(14, GameAgent.__$stepFactory0_rfield), new __StepDesc(15, GameAgent.__$stepFactory0_rfield), new __StepDesc(16, GameAgent.__$stepFactory0_rfield)};
+            final __StepDesc[] __$steps = {new __StepDesc(12, GameAgent.__$stepFactory0_rfield), new __StepDesc(13, GameAgent.__$stepFactory0_rfield), new __StepDesc(14, GameAgent.__$stepFactory0_rfield), new __StepDesc(15, GameAgent.__$stepFactory0_rfield), new __StepDesc(16, GameAgent.__$stepFactory0_rfield), new __StepDesc(17, GameAgent.__$stepFactory0_rfield)};
             return new SequentialBehaviorDebug(__$parentGoal, null, null, null, null, false, __$signature, (short)0, 4, __$behaviorFrame, __$steps, __$behaviorDesc);
          }
          case 6: {
@@ -65,7 +65,7 @@ public class GameAgent_BehaviorFactories {
                final Object[] __$behaviorFrame = new Object[1];
                __$behaviorFrame[0] = new __ValueTypes.IntVar((Integer)__$args[0]);
 
-            final __StepDesc[] __$steps = {new __StepDesc(17, GameAgent.__$stepFactory0_rfield), new __StepDesc(18, GameAgent.__$stepFactory0_rfield), new __StepDesc(19, GameAgent.__$stepFactory0_rfield)};
+            final __StepDesc[] __$steps = {new __StepDesc(18, GameAgent.__$stepFactory0_rfield), new __StepDesc(19, GameAgent.__$stepFactory0_rfield), new __StepDesc(20, GameAgent.__$stepFactory0_rfield)};
             return new SequentialBehaviorDebug(__$parentGoal, null, null, null, null, false, __$signature, (short)0, 6, __$behaviorFrame, __$steps, __$behaviorDesc);
          }
          case 7: {
@@ -73,7 +73,7 @@ public class GameAgent_BehaviorFactories {
                final Object[] __$behaviorFrame = new Object[1];
                __$behaviorFrame[0] = new __ValueTypes.IntVar((Integer)__$args[0]);
 
-            final __StepDesc[] __$steps = {new __StepDesc(20, GameAgent.__$stepFactory0_rfield), new __StepDesc(21, GameAgent.__$stepFactory0_rfield)};
+            final __StepDesc[] __$steps = {new __StepDesc(21, GameAgent.__$stepFactory0_rfield), new __StepDesc(22, GameAgent.__$stepFactory0_rfield)};
             return new SequentialBehaviorDebug(__$parentGoal, null, null, null, null, false, __$signature, (short)0, 7, __$behaviorFrame, __$steps, __$behaviorDesc);
          }
          case 8: {
@@ -81,7 +81,7 @@ public class GameAgent_BehaviorFactories {
                final Object[] __$behaviorFrame = new Object[3];
                __$behaviorFrame[0] = new __ValueTypes.IntVar((Integer)__$args[0]);
 
-            final __StepDesc[] __$steps = {new __StepDesc(22, GameAgent.__$stepFactory0_rfield), new __StepDesc(23, GameAgent.__$stepFactory0_rfield), new __StepDesc(24, GameAgent.__$stepFactory0_rfield)};
+            final __StepDesc[] __$steps = {new __StepDesc(23, GameAgent.__$stepFactory0_rfield), new __StepDesc(24, GameAgent.__$stepFactory0_rfield), new __StepDesc(25, GameAgent.__$stepFactory0_rfield)};
             return new SequentialBehaviorDebug(__$parentGoal, null, null, null, null, false, __$signature, (short)0, 8, __$behaviorFrame, __$steps, __$behaviorDesc);
          }
          case 9: {
@@ -89,7 +89,7 @@ public class GameAgent_BehaviorFactories {
                final Object[] __$behaviorFrame = new Object[1];
                __$behaviorFrame[0] = new __ValueTypes.IntVar((Integer)__$args[0]);
 
-            final __StepDesc[] __$steps = {new __StepDesc(25, GameAgent.__$stepFactory0_rfield)};
+            final __StepDesc[] __$steps = {new __StepDesc(26, GameAgent.__$stepFactory0_rfield)};
             return new SequentialBehaviorDebug(__$parentGoal, null, null, null, null, false, __$signature, (short)0, 9, __$behaviorFrame, __$steps, __$behaviorDesc);
          }
          case 10: {
@@ -100,7 +100,7 @@ public class GameAgent_BehaviorFactories {
                __$behaviorFrame[2] = new __ValueTypes.IntVar();
                __$behaviorFrame[3] = new __ValueTypes.IntVar();
 
-            final __StepDesc[] __$steps = {new __StepDesc(26, GameAgent.__$stepFactory0_rfield), new __StepDesc(27, GameAgent.__$stepFactory0_rfield)};
+            final __StepDesc[] __$steps = {new __StepDesc(27, GameAgent.__$stepFactory0_rfield), new __StepDesc(28, GameAgent.__$stepFactory0_rfield)};
             return new SequentialBehaviorDebug(__$parentGoal, null, null, null, null, false, __$signature, (short)0, 10, __$behaviorFrame, __$steps, __$behaviorDesc);
          }
          case 11: {
@@ -108,11 +108,11 @@ public class GameAgent_BehaviorFactories {
                final Object[] __$behaviorFrame = new Object[1];
                __$behaviorFrame[0] = (AllyWME)__$args[0];
 
-            final __StepDesc[] __$steps = {new __StepDesc(28, GameAgent.__$stepFactory0_rfield), new __StepDesc(29, GameAgent.__$stepFactory0_rfield)};
+            final __StepDesc[] __$steps = {new __StepDesc(29, GameAgent.__$stepFactory0_rfield), new __StepDesc(30, GameAgent.__$stepFactory0_rfield)};
             return new SequentialBehaviorDebug(__$parentGoal, null, null, null, null, false, __$signature, (short)0, 11, __$behaviorFrame, __$steps, __$behaviorDesc);
          }
          case 13: {
-            // lookForQuip-12->ConditionalStep32_IF_FailStep_1
+            // lookForQuip-12->ConditionalStep33_IF_FailStep_1
                final Object[] __$behaviorFrame = __$args;
 
             final __StepDesc[] __$steps = {new __StepDesc(-2, GameAgent.__$stepFactory0_rfield)};
@@ -125,21 +125,46 @@ public class GameAgent_BehaviorFactories {
                __$behaviorFrame[2] = new __ValueTypes.BooleanVar();
                __$behaviorFrame[3] = new __ValueTypes.LongVar(System.currentTimeMillis());
 
-            final __StepDesc[] __$steps = {new __StepDesc(30, GameAgent.__$stepFactory0_rfield), new __StepDesc(31, GameAgent.__$stepFactory0_rfield), new __StepDesc(32, GameAgent.__$stepFactory0_rfield), new __StepDesc(33, GameAgent.__$stepFactory0_rfield), new __StepDesc(34, GameAgent.__$stepFactory0_rfield)};
+            final __StepDesc[] __$steps = {new __StepDesc(31, GameAgent.__$stepFactory0_rfield), new __StepDesc(32, GameAgent.__$stepFactory0_rfield), new __StepDesc(33, GameAgent.__$stepFactory0_rfield), new __StepDesc(34, GameAgent.__$stepFactory0_rfield), new __StepDesc(35, GameAgent.__$stepFactory0_rfield)};
             return new SequentialBehaviorDebug(__$parentGoal, null, null, null, null, false, __$signature, (short)0, 12, __$behaviorFrame, __$steps, __$behaviorDesc);
          }
+         case 15: {
+            // lookToGossip-14->ConditionalStep38_IF_FailStep_1
+               final Object[] __$behaviorFrame = __$args;
+
+            final __StepDesc[] __$steps = {new __StepDesc(-2, GameAgent.__$stepFactory0_rfield)};
+            return new SequentialBehaviorDebug(__$parentGoal, null, null, null, null, false, __$signature, (short)0, 15, __$behaviorFrame, __$steps, __$behaviorDesc);
+         }
+         case 16: {
+            // lookToGossip-14->ConditionalStep40_IF_PrimitiveStep_1
+               final Object[] __$behaviorFrame = __$args;
+
+            final __StepDesc[] __$steps = {new __StepDesc(41, GameAgent.__$stepFactory0_rfield)};
+            return new SequentialBehaviorDebug(__$parentGoal, null, null, null, null, false, __$signature, (short)0, 16, __$behaviorFrame, __$steps, __$behaviorDesc);
+         }
          case 14: {
+            // lookToGossip_1
+               final Object[] __$behaviorFrame = new Object[5];
+               __$behaviorFrame[0] = new __ValueTypes.IntVar((Integer)__$args[0]);
+               __$behaviorFrame[2] = new __ValueTypes.LongVar(System.currentTimeMillis());
+               __$behaviorFrame[3] = new CalDistanceWME();
+               __$behaviorFrame[4] = new ArrayHolder(15);
+
+            final __StepDesc[] __$steps = {new __StepDesc(36, GameAgent.__$stepFactory0_rfield), new __StepDesc(37, GameAgent.__$stepFactory0_rfield), new __StepDesc(38, GameAgent.__$stepFactory0_rfield), new __StepDesc(39, GameAgent.__$stepFactory0_rfield), new __StepDesc(40, GameAgent.__$stepFactory0_rfield)};
+            return new SequentialBehaviorDebug(__$parentGoal, null, null, null, null, false, __$signature, (short)0, 14, __$behaviorFrame, __$steps, __$behaviorDesc);
+         }
+         case 17: {
             // GameAgent_RootCollectionBehavior
 
-            final __StepDesc[] __$steps = {new __StepDesc(35, GameAgent.__$stepFactory0_rfield), new __StepDesc(36, GameAgent.__$stepFactory0_rfield), new __StepDesc(37, GameAgent.__$stepFactory0_rfield)};
-            return new CollectionBehaviorDebug(__$parentGoal, null, null, null, null, false, __$signature, (short)0, 14, null, __$steps, 3, __$behaviorDesc);
+            final __StepDesc[] __$steps = {new __StepDesc(42, GameAgent.__$stepFactory0_rfield), new __StepDesc(43, GameAgent.__$stepFactory0_rfield), new __StepDesc(44, GameAgent.__$stepFactory0_rfield)};
+            return new CollectionBehaviorDebug(__$parentGoal, null, null, null, null, false, __$signature, (short)0, 17, null, __$steps, 3, __$behaviorDesc);
          }
-         case 15: {
+         case 18: {
             // __$defaultMemoryExecuteBehavior_1
                final Object[] __$behaviorFrame = __$args;
 
             final __StepDesc[] __$steps = null;
-            return new MemoryExecuteBehaviorDebug(__$parentGoal, null, null, null, null, false, __$signature, (short)0, 15, __$behaviorFrame, __$steps, 0, __$behaviorDesc);
+            return new MemoryExecuteBehaviorDebug(__$parentGoal, null, null, null, null, false, __$signature, (short)0, 18, __$behaviorFrame, __$steps, 0, __$behaviorDesc);
          }
       default:
          throw new AblRuntimeError("Unexpected behaviorID " + __$behaviorID);

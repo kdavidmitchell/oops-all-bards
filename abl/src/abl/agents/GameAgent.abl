@@ -11,6 +11,7 @@ behaving_entity GameAgent {
 	register act protect(int, int) with Protect;
 	register act quip(int, boolean) with Quip;
 	register act requestAssistance(int) with RequestAssistance;
+	register act gossip(int, ArrayHolder) with Gossip;
 	
 	// Declare utility class that holds most up-to-date copies of WME for given char by ID
 	WMEDictionary dict = new WMEDictionary();
@@ -38,7 +39,7 @@ behaving_entity GameAgent {
 	    }
 	    
 	    mental_act {
-	    	System.out.println("Updating ally wme in dictionary.");
+	    	System.out.println("Updating ally wme in dictionary."+newAllyWME.getID());
             dict.addCharacter(newAllyWME.getID(), newAllyWME);
         }
     }
@@ -54,6 +55,7 @@ behaving_entity GameAgent {
     	}
     	
     	with (persistent, priority 1) subgoal lookForQuip(id);
+    	with (persistent) subgoal lookToGossip(id);
         with (persistent) subgoal manageCombat(id);
         // with (persistent) subgoal manageNoncombat(allyAgent); 
     }
@@ -150,6 +152,32 @@ behaving_entity GameAgent {
     	}
     	
     	act quip(id, inCombat);
+    }
+    
+    sequential behavior lookToGossip(int id) {
+    	AllyWME agent;
+    	long startTime = System.currentTimeMillis();
+    	CalDistanceWME calDisWME = new CalDistanceWME();
+    	ArrayHolder aroundChars = new ArrayHolder(15);
+    	
+    	with ( success_test { ( System.currentTimeMillis() > startTime + 5000 ) } ) wait;
+    	
+    	mental_act {
+    		agent = dict.getCharacter(id);
+    	}
+    	
+    	if { (agent == null) } {
+    		fail_step;
+    	}
+    	
+    	mental_act {
+			System.out.println("Look to gossip.");
+    	}
+    	
+    	if{ (calDisWME.isNPCAround(aroundChars, agent, dict)) } {
+    		act gossip(id, aroundChars);
+    	}
+    	
     }
 
     // This is a collection behavior s.t. all children act in parallel and never result in failure

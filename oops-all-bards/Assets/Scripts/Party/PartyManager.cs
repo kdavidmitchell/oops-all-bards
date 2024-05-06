@@ -62,6 +62,18 @@ public class PartyManager : MonoBehaviour
         return null;
     }
 
+    public BasePlayer FindPartyMemberByName(string name)
+    {
+        foreach (BasePlayer p in currentParty) 
+        {
+            if (p.Name == name)
+            {
+                return p;
+            }
+        }
+        return null;
+    }
+
     public void TogglePartyUI()
     {
         partyUI.SetActive(!partyUI.activeSelf);

@@ -70,7 +70,7 @@ public class GameAgent_SuccessTests {
 
             return false;
          }
-         case 12: {
+         case 13: {
             // manageCombat_1Step2
                if (
                   ((GameAgent)__$thisEntity).dict.getCharacter(((__ValueTypes.IntVar)__$behaviorFrame[0]).i).getInCombat() == true
@@ -83,7 +83,7 @@ public class GameAgent_SuccessTests {
 
             return false;
          }
-         case 17: {
+         case 18: {
             // lookForAssistance_1Step1
                if (
                   ((GameAgent)__$thisEntity).dict.getCharacter(((__ValueTypes.IntVar)__$behaviorFrame[0]).i).getHealth() <= 5
@@ -96,7 +96,7 @@ public class GameAgent_SuccessTests {
 
             return false;
          }
-         case 21: {
+         case 22: {
             // waitForTurn_1Step2
                if (
                   ((GameAgent)__$thisEntity).dict.getCharacter(((__ValueTypes.IntVar)__$behaviorFrame[0]).i).getOwnsTurn() == true
@@ -109,7 +109,7 @@ public class GameAgent_SuccessTests {
 
             return false;
          }
-         case 23: {
+         case 24: {
             // lookToAssist_1Step2
                List wmeList0;
                ListIterator wmeIter0;
@@ -139,7 +139,7 @@ public class GameAgent_SuccessTests {
 
             return false;
          }
-         case 28: {
+         case 29: {
             // manageNoncombat_1Step1
                if (
                   ((AllyWME)__$behaviorFrame[0]).getInCombat() == false
@@ -152,10 +152,23 @@ public class GameAgent_SuccessTests {
 
             return false;
          }
-         case 30: {
+         case 31: {
             // lookForQuip_1Step1
                if (
                   System.currentTimeMillis() > ((__ValueTypes.LongVar)__$behaviorFrame[3]).l + 10000
+               )
+
+               {
+                  return true;
+               }
+
+
+            return false;
+         }
+         case 36: {
+            // lookToGossip_1Step1
+               if (
+                  System.currentTimeMillis() > ((__ValueTypes.LongVar)__$behaviorFrame[2]).l + 5000
                )
 
                {

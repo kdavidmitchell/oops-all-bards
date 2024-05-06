@@ -81,7 +81,7 @@ public class TCPTestClient : MonoBehaviour {
 	/// <summary> 	
 	/// Send a stringified JSON object to server using socket connection. 	
 	/// </summary> 	
-	public void SendMessage(ABLMessage message) {       
+	public void SendMessage<T>(T message) {       
 		if (socketConnection == null) {       
 			Debug.Log("Returning because socket connection is null");      
 			return;         
@@ -126,7 +126,7 @@ public class TCPTestClient : MonoBehaviour {
 		foreach (BasePlayer partyMember in PartyManager.Instance.currentParty)
 		{
 			ABLMessage msg = CreateABLMessage(partyMember);
-			SendMessage(msg);
+			SendMessage<ABLMessage>(msg);
 		}
 	} 
 }

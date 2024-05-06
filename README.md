@@ -4,9 +4,21 @@
 
 ## Contributors ##
 
+### Project Leads ###
 1. [Kyle Mitchell](https://github.com/kdavidmitchell)
-2. [Camden Pettijohn](https://github.com/Camden-png)
-3. [Joshua McCoy](https://github.com/dr-jam)
+2. [Joshua McCoy](https://github.com/dr-jam)
+
+### Active Development Team ###
+3. [Sarah Crowe]()
+4. [Henry Ng]()
+5. [Preston Chan]()
+6. [Grant Gelardi]()
+7. [Fuhsin Liao]()
+
+### Project Alumni ###
+
+8. [Camden Pettijohn](https://github.com/Camden-png)
+9. [Brandon Hillig]()
 
 ## About ##
 

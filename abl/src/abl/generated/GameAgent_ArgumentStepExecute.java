@@ -35,49 +35,62 @@ public class GameAgent_ArgumentStepExecute {
             args[0] = new Integer(((__ValueTypes.IntVar)__$behaviorFrame[1]).i);
             return args;
          }
-         case 14: {
+         case 11: {
+            // manageAllyAgent_1Step4
+            final Object[] args = new Object[1];
+            args[0] = new Integer(((__ValueTypes.IntVar)__$behaviorFrame[1]).i);
+            return args;
+         }
+         case 15: {
             // manageCombat_1Step4
             final Object[] args = new Object[1];
             args[0] = new Integer(((__ValueTypes.IntVar)__$behaviorFrame[0]).i);
             return args;
          }
-         case 15: {
+         case 16: {
             // manageCombat_1Step5
             final Object[] args = new Object[1];
             args[0] = new Integer(((__ValueTypes.IntVar)__$behaviorFrame[0]).i);
             return args;
          }
-         case 16: {
+         case 17: {
             // manageCombat_1Step6
             final Object[] args = new Object[1];
             args[0] = new Integer(((__ValueTypes.IntVar)__$behaviorFrame[0]).i);
             return args;
          }
-         case 19: {
+         case 20: {
             // lookForAssistance_1Step3
             final Object[] args = new Object[1];
             args[0] = new Integer(((__ValueTypes.IntVar)__$behaviorFrame[0]).i);
             return args;
          }
-         case 24: {
+         case 25: {
             // lookToAssist_1Step3
             final Object[] args = new Object[2];
             args[0] = ((AllyWME)__$behaviorFrame[2]);
             args[1] = ((AllyWME)__$behaviorFrame[1]);
             return args;
          }
-         case 27: {
+         case 28: {
             // assistAlly_1Step2
             final Object[] args = new Object[2];
             args[0] = new Integer(((__ValueTypes.IntVar)__$behaviorFrame[2]).i);
             args[1] = new Integer(((__ValueTypes.IntVar)__$behaviorFrame[3]).i);
             return args;
          }
-         case 34: {
+         case 35: {
             // lookForQuip_1Step5
             final Object[] args = new Object[2];
             args[0] = new Integer(((__ValueTypes.IntVar)__$behaviorFrame[0]).i);
             args[1] = new Boolean(((__ValueTypes.BooleanVar)__$behaviorFrame[2]).b);
+            return args;
+         }
+         case 41: {
+            // lookToGossip-14->ConditionalStep40_IF_PrimitiveStep_1Step1
+            final Object[] args = new Object[2];
+            args[0] = new Integer(((__ValueTypes.IntVar)__$behaviorFrame[0]).i);
+            args[1] = ((ArrayHolder)__$behaviorFrame[4]);
             return args;
          }
       default:

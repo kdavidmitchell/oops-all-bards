@@ -36,20 +36,21 @@ public class GameAgent_Analysis {
             // manageAllyAgent_1
             List<String> _$analysisStepIDs = new ArrayList<String>();
             _$analysisStepIDs.add("lookForQuip(int)"); // stepID 9
-            _$analysisStepIDs.add("manageCombat(int)"); // stepID 10
+            _$analysisStepIDs.add("lookToGossip(int)"); // stepID 10
+            _$analysisStepIDs.add("manageCombat(int)"); // stepID 11
             return _$analysisStepIDs;
          }
          case 5: {
-            // manageCombat-4->ConditionalStep11_IF_FailStep_1
+            // manageCombat-4->ConditionalStep12_IF_FailStep_1
             List<String> _$analysisStepIDs = new ArrayList<String>();
             return _$analysisStepIDs;
          }
          case 4: {
             // manageCombat_1
             List<String> _$analysisStepIDs = new ArrayList<String>();
-            _$analysisStepIDs.add("lookToAssist(int)"); // stepID 14
-            _$analysisStepIDs.add("waitForTurn(int)"); // stepID 15
-            _$analysisStepIDs.add("lookForAssistance(int)"); // stepID 16
+            _$analysisStepIDs.add("lookToAssist(int)"); // stepID 15
+            _$analysisStepIDs.add("waitForTurn(int)"); // stepID 16
+            _$analysisStepIDs.add("lookForAssistance(int)"); // stepID 17
             return _$analysisStepIDs;
          }
          case 6: {
@@ -65,7 +66,7 @@ public class GameAgent_Analysis {
          case 8: {
             // lookToAssist_1
             List<String> _$analysisStepIDs = new ArrayList<String>();
-            _$analysisStepIDs.add("assistAlly(AllyWME, AllyWME)"); // stepID 24
+            _$analysisStepIDs.add("assistAlly(AllyWME, AllyWME)"); // stepID 25
             return _$analysisStepIDs;
          }
          case 9: {
@@ -84,7 +85,7 @@ public class GameAgent_Analysis {
             return _$analysisStepIDs;
          }
          case 13: {
-            // lookForQuip-12->ConditionalStep32_IF_FailStep_1
+            // lookForQuip-12->ConditionalStep33_IF_FailStep_1
             List<String> _$analysisStepIDs = new ArrayList<String>();
             return _$analysisStepIDs;
          }
@@ -93,14 +94,29 @@ public class GameAgent_Analysis {
             List<String> _$analysisStepIDs = new ArrayList<String>();
             return _$analysisStepIDs;
          }
-         case 14: {
-            // GameAgent_RootCollectionBehavior
+         case 15: {
+            // lookToGossip-14->ConditionalStep38_IF_FailStep_1
             List<String> _$analysisStepIDs = new ArrayList<String>();
-            _$analysisStepIDs.add("allyAgentRoot()"); // stepID 36
-            _$analysisStepIDs.add("lookForAllyAgent()"); // stepID 37
             return _$analysisStepIDs;
          }
-         case 15: {
+         case 16: {
+            // lookToGossip-14->ConditionalStep40_IF_PrimitiveStep_1
+            List<String> _$analysisStepIDs = new ArrayList<String>();
+            return _$analysisStepIDs;
+         }
+         case 14: {
+            // lookToGossip_1
+            List<String> _$analysisStepIDs = new ArrayList<String>();
+            return _$analysisStepIDs;
+         }
+         case 17: {
+            // GameAgent_RootCollectionBehavior
+            List<String> _$analysisStepIDs = new ArrayList<String>();
+            _$analysisStepIDs.add("allyAgentRoot()"); // stepID 43
+            _$analysisStepIDs.add("lookForAllyAgent()"); // stepID 44
+            return _$analysisStepIDs;
+         }
+         case 18: {
             // __$defaultMemoryExecuteBehavior_1
             List<String> _$analysisStepIDs = new ArrayList<String>();
             return _$analysisStepIDs;

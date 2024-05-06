@@ -6,6 +6,7 @@ import org.json.simple.parser.ParseException;
 
 import wm.WME;
 import abl.wmes.AllyWME;
+import handler.*;
 
 public class Message {
 	public int code;
@@ -47,5 +48,20 @@ public class Message {
 			return wme;
 		}
 		return null;
+	}
+
+	void parseDelpMessage(DelpHandler handler)
+	{
+		if (this.code == 4)
+		{
+			String query = (String) this.data.get("query");
+			String answer = handler.query(query);
+			System.out.println("KB queried: " + query);
+			System.out.println("Answer: " + answer);
+		} else {
+			String belief = (String) this.data.get("belief");
+			handler.addBelief(belief);
+			System.out.println("KB updated: " + belief);
+		}
 	}
 }

@@ -21,6 +21,9 @@ public class BasePlayer : ITargetable
     [SerializeField] private List<CombatStatus> combatStatuses = new List<CombatStatus>();
     [SerializeField] private GameObject model;
     [SerializeField] private GameObject battleModel;
+    [SerializeField] private float locationX;
+    [SerializeField] private float locationY;
+    [SerializeField] private float locationZ;
 
     public BasePlayer()
     {
@@ -40,9 +43,12 @@ public class BasePlayer : ITargetable
         this.combatStatuses = new List<CombatStatus>();
         this.model = null;
         this.battleModel = null;
+        this.locationX = 0.0f;
+        this.locationY = 0.0f;
+        this.locationZ = 0.0f;
     }
 
-    public BasePlayer(string name, int id, int health, int flourish, int shield, int elan, BaseClass playerClass, int fame, int gold, List<BaseItem> equipment, List<BaseItem> inventory, GameObject model)
+    public BasePlayer(string name, int id, int health, int flourish, int shield, int elan, BaseClass playerClass, int fame, int gold, List<BaseItem> equipment, List<BaseItem> inventory, GameObject model, float locationX, float locationY, float locationZ)
     {
         this.name = name;
         this.id = id;
@@ -58,6 +64,9 @@ public class BasePlayer : ITargetable
         this.cifData = new CiFData();
         this.ownsTurn = false;
         this.model = model;
+        this.locationX = locationX;
+        this.locationY = locationY;
+        this.locationZ = locationZ;
     }
 
     public override string Name
@@ -94,6 +103,22 @@ public class BasePlayer : ITargetable
     {
         get { return this.elan; }
         set { this.elan = value; }
+    }
+    public float LocationX
+    {
+        get { return this.locationX; }
+        set { this.locationX = value; }
+    }
+
+    public float LocationY
+    {
+        get { return this.locationY; }
+        set { this.locationY = value; }
+    }
+    public float LocationZ
+    {
+        get { return this.locationZ; }
+        set { this.locationZ = value; }
     }
 
     public BaseClass PlayerClass

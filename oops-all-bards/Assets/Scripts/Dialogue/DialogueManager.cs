@@ -22,6 +22,7 @@ public class DialogueManager : MonoBehaviour
     public GameObject nodeResponsePrefab;
     public GameObject textBubblePrefab;
     public GameObject questUI;
+    public GameObject NPCModelSpawn;
 
     // Singleton pattern
     void Awake()
@@ -39,6 +40,8 @@ public class DialogueManager : MonoBehaviour
 
     void Start()
     {
+        Debug.Log(gameObject.name);//TEST
+
         //jsonReader.quips.DebugQuips();
     }
 
@@ -68,10 +71,51 @@ public class DialogueManager : MonoBehaviour
     {
         speakerName.text = dialogue.SpeakerName;
         portrait.sprite = Resources.Load<Sprite>($"Portraits/{dialogue.SpeakerName}");
+        
+        // if (portrait.sprite == null)
+        // {
+        //     dialogueModel();
+        // }
+        
         DialogueNode currentNode = dialogue.DialogueNodes[nodeIndex];
         RenderCurrentNode(currentNode);
         ToggleDialogueUI();
     }
+    
+    public void dialogueModel(GameObject character)
+    {
+        GameObject NPCModelSpawn = null;
+        GameObject target = character.transform.Find("CameraTarget").gameObject;
+
+        //repurpose this so that it's not actually using the player and instead just the model
+        NPCModelSpawn = Instantiate(target, portrait.transform.position, Quaternion.Euler(new Vector3(0f, 180f, 0f)));
+        NPCModelSpawn.name = "ccClone";
+        NPCModelSpawn.AddComponent<RotateObj>();
+        NPCModelSpawn.transform.SetParent(GameObject.Find("Canvas").transform.Find("Panel").transform.Find("DialogueUI").transform.Find("PortraitPanel").transform.Find("Portrait"));
+
+        if (GameObject.Find("Canvas").transform.Find("Panel").transform.Find("DialogueUI").transform.Find("PortraitPanel").transform.Find("Portrait") == null)
+        {
+            Debug.Log("no luck");
+        }
+
+        foreach (Transform child in NPCModelSpawn.transform.GetComponentsInChildren<Transform>())
+        {
+            child.gameObject.layer = 5; //layer 5 literally just means it's in the ui layer
+        }
+
+        RenderModel(NPCModelSpawn);
+    }
+
+    public void RenderModel(GameObject model)
+    {
+        if (transform.childCount > 0)
+        {
+            GameObject currentChild = transform.GetChild(0).gameObject;
+            Destroy(currentChild);
+        }
+    }
+    /////
+    ///
 
     private void RenderCurrentNode(DialogueNode node)
     {
@@ -91,13 +135,6 @@ public class DialogueManager : MonoBehaviour
                 Debug.Log($"{response.Then}");
                 toInstantiate.GetComponent<Button>().onClick.AddListener(delegate { Invoke(response.Then, 0); });
             }
-
-            /*
-            //testing for fixing UI scaling issue
-            RectTransform testing = (RectTransform)nodeContentOrganizer.transform;
-            toInstantiate.GetComponent<RectTransform>().sizeDelta = new Vector2((testing.rect.width * 3), testing.rect.height);
-            LayoutRebuilder.ForceRebuildLayoutImmediate(toInstantiate.GetComponent<RectTransform>());
-            */
 
 
         }

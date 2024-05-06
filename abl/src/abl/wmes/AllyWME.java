@@ -13,11 +13,11 @@ public class AllyWME extends WME {
 	/** Whether or not the ally is in combat */
 	private boolean inCombat;
 	/** The x location of the ally */
-	private float locationX;
+	private double locationX;
 	/** The y location of the ally */
-	private float locationY;
+	private double locationY;
 	/** The z location of the ally */
-	private float locationZ;
+	private double locationZ;
 	/** The ally character's health */
 	private int health;
 	/** The ally character's flourish points */
@@ -71,9 +71,9 @@ public class AllyWME extends WME {
 		this.onTree = false;
 		this.id = (int)(long) data.get("id");
 		this.inCombat = (boolean) data.get("inCombat");
-//		this.locationX = (float) data.get("locationX");
-//		this.locationY = (float) data.get("locationY");
-//		this.locationZ = (float) data.get("locationZ");
+		this.locationX = (double) data.get("locationX");
+		this.locationY = (double) data.get("locationY");
+		this.locationZ = (double) data.get("locationZ");
 		this.health = (int)(long) data.get("health");
 		this.flourish = (int)(long) data.get("flourish");
 		this.shield = (int)(long) data.get("shield");
@@ -122,11 +122,11 @@ public class AllyWME extends WME {
 	
 	public boolean getInCombat() { return inCombat; }
 	
-	public float getLocationX() { return locationX; }
+	public double getLocationX() { return locationX; }
 	
-	public float getLocationY() { return locationY; }
+	public double getLocationY() { return locationY; }
 	
-	public float getLocationZ() { return locationZ; }
+	public double getLocationZ() { return locationZ; }
 	
 	public int getHealth() { return health; }
 	
