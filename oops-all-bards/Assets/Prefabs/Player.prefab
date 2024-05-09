@@ -3140,7 +3140,7 @@ GameObject:
   - component: {fileID: 5981923485986492436}
   - component: {fileID: 2175299987274122914}
   m_Layer: 0
-  m_Name: Character_Knight_01_Black(Clone)
+  m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
