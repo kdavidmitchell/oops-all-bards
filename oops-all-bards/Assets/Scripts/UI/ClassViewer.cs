@@ -9,6 +9,10 @@ public class ClassViewer : MonoBehaviour
     public GameObject classDescription;
     public GameObject[] classStats;
     public GameObject[] classAbilites;
+    public GameObject[] abilityDescriptions;
+    
+    //A reference to the tooltip UI
+    public CanvasGroup currentToolTip;
     public JSONReader jsonReader;
     private int index = 0;
     private int max = 3;
@@ -66,6 +70,8 @@ public class ClassViewer : MonoBehaviour
         for (int i = 0; i < c.Abilities.Count; i++)
         {
             classAbilites[i].GetComponent<TMP_Text>().text = c.Abilities[i].Name;
+            abilityDescriptions[i].GetComponent<TMP_Text>().text = c.Abilities[i].Description;
+            abilityDescriptions[i].AddComponent<ToolTips>(); //Add comment later when not dead
         }
     }
 

@@ -10,6 +10,7 @@ public class BasePlayer : ITargetable
     [SerializeField] private int health;
     [SerializeField] private int flourish;
     [SerializeField] private int shield;
+    [SerializeField] private int elan;
     [SerializeField] private BaseClass playerClass;
     [SerializeField] private int fame;
 	[SerializeField] private int gold;
@@ -19,6 +20,10 @@ public class BasePlayer : ITargetable
     [SerializeField] private bool ownsTurn;
     [SerializeField] private List<CombatStatus> combatStatuses = new List<CombatStatus>();
     [SerializeField] private GameObject model;
+    [SerializeField] private GameObject battleModel;
+    [SerializeField] private float locationX;
+    [SerializeField] private float locationY;
+    [SerializeField] private float locationZ;
 
     public BasePlayer()
     {
@@ -27,6 +32,7 @@ public class BasePlayer : ITargetable
         this.health = 0;
         this.flourish = 0;
         this.shield = 0;
+        this.elan = 0;
         this.playerClass = null;
         this.fame = 0;
         this.gold = 0;
@@ -36,15 +42,20 @@ public class BasePlayer : ITargetable
         this.ownsTurn = false;
         this.combatStatuses = new List<CombatStatus>();
         this.model = null;
+        this.battleModel = null;
+        this.locationX = 0.0f;
+        this.locationY = 0.0f;
+        this.locationZ = 0.0f;
     }
 
-    public BasePlayer(string name, int id, int health, int flourish, int shield, BaseClass playerClass, int fame, int gold, List<BaseItem> equipment, List<BaseItem> inventory, GameObject model)
+    public BasePlayer(string name, int id, int health, int flourish, int shield, int elan, BaseClass playerClass, int fame, int gold, List<BaseItem> equipment, List<BaseItem> inventory, GameObject model, float locationX, float locationY, float locationZ)
     {
         this.name = name;
         this.id = id;
         this.health = health;
         this.flourish = flourish;
         this.shield = shield;
+        this.elan = elan;
         this.playerClass = playerClass;
         this.fame = fame;
         this.gold = gold;
@@ -53,6 +64,9 @@ public class BasePlayer : ITargetable
         this.cifData = new CiFData();
         this.ownsTurn = false;
         this.model = model;
+        this.locationX = locationX;
+        this.locationY = locationY;
+        this.locationZ = locationZ;
     }
 
     public override string Name
@@ -83,6 +97,28 @@ public class BasePlayer : ITargetable
     {
         get { return this.shield; }
         set { this.shield = value; }
+    }
+
+    public override int Elan
+    {
+        get { return this.elan; }
+        set { this.elan = value; }
+    }
+    public float LocationX
+    {
+        get { return this.locationX; }
+        set { this.locationX = value; }
+    }
+
+    public float LocationY
+    {
+        get { return this.locationY; }
+        set { this.locationY = value; }
+    }
+    public float LocationZ
+    {
+        get { return this.locationZ; }
+        set { this.locationZ = value; }
     }
 
     public BaseClass PlayerClass
@@ -137,6 +173,12 @@ public class BasePlayer : ITargetable
     {
         get { return this.model; }
         set { this.model = value; }
+    }
+
+    public GameObject BattleModel
+    {
+        get { return this.battleModel; }
+        set { this.battleModel = value; }
     }
 
     public override void RemoveCombatStatus(CombatStatus.CombatStatusTypes type)

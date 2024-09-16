@@ -10,27 +10,21 @@ public class CombatManager : MonoBehaviour
 {
 
     private static CombatManager _instance;
-    // References to player and enemy portraits.
-    public GameObject partyPortraits;
-    public GameObject enemyPortraits;
-    // A reference to the portrait UI prefab.
-    public GameObject portraitUI;
+
+    //public reference to ui gameobject
+    public CombatUI combatUI;
+    public GameObject UI;  
     // A reference to the combat queue.
     public CombatQueue combatQueue;
-    // A reference to the combat action menu.
-    public GameObject combatMenu;
-    // A reference to the combat action menu button prefab.
-    public GameObject actionButton;
-    // A reference to the target button prefab.
-    public GameObject targetButton;
     // A reference to the player party.
-    public BasePlayer[] party;
+    public List<BasePlayer> party = new List<BasePlayer>();
     // A reference to the enemies.
     public List<BaseEnemy> enemies = new List<BaseEnemy>();
     // A counter for the number of rounds combat has lasted for.
     public int rounds = 1;
     // A reference to a target name, if any.
     public string target = null;
+
     public static CombatManager Instance => CombatManager._instance;
 
     void Awake()
@@ -47,10 +41,13 @@ public class CombatManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         SubscribeToEvents();
-        InitCombatQueue(PartyManager.Instance.currentParty.ToArray(), DemoManager.Instance.GenerateEnemies());
-        RenderUI();
-        DemoManager.Instance.CheckQueue();
+        InitCombatQueue(PartyManager.Instance.currentParty, EnemyFactory.Instance.GenerateRandomEnemies(2));
+        GameManager.Instance.CheckQueue();
+        combatUI = CombatUI.Instance;
+        combatUI.SetActiveCamera(combatUI.OverviewCamera);
+        CombatUI.Instance.UpdateCombatLog("I've finished starting up.");
         Debug.Log("I've finished starting up.");
     }
 
@@ -63,82 +60,15 @@ public class CombatManager : MonoBehaviour
     // A function that uses the event management system to subscribe to events used in this manager.
     private void SubscribeToEvents()
     {
-        EventManager.Instance.SubscribeToEvent(EventType.EnemyAI, TakeEnemyAction);
-        EventManager.Instance.SubscribeToEvent(EventType.AllyAI, TakeAllyAction);
+        EventManager.Instance.SubscribeToEvent(EventType.AllyAI, DoAllyAction);
+
+        EventManager.Instance.SubscribeToEvent(EventType.EnemyAI, DoEnemyAction);
+
     }
 
-    // A function used to render all UI elements for the demo.
-    public void RenderUI()
-    {
-        // Render the portrait section and combat menu.
-        partyPortraits.SetActive(true);
-        enemyPortraits.SetActive(true);
-        combatMenu.SetActive(true);
-
-        // Instantiate portrait UI for party and enemies.
-        // Need: name, current health/flourish, max health/flourish, portrait
-        foreach (BasePlayer p in party)
-        {
-            GameObject toInstantiate = Instantiate(portraitUI, partyPortraits.transform);
-            // Set name text
-            toInstantiate.transform.GetChild(0).transform.GetChild(0).transform.GetChild(3).GetComponent<TMP_Text>().text = p.Name;
-            // Set portraits
-            toInstantiate.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>().sprite = PartyManager.Instance.GetPortraitByName(p.Name);
-            // Set health and flourish values and update them
-            ValueBar healthBar = toInstantiate.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<ValueBar>();
-            healthBar.maxValue = p.Health;
-            healthBar.UpdateValueBar(p.Health);
-            ValueBar flourishBar = toInstantiate.transform.GetChild(0).transform.GetChild(0).transform.GetChild(2).GetComponent<ValueBar>();
-            flourishBar.maxValue = p.Flourish;
-            flourishBar.UpdateValueBar(p.Flourish);
-        }
-
-        foreach (BaseEnemy e in enemies)
-        {
-            GameObject toInstantiate = Instantiate(portraitUI, enemyPortraits.transform);
-            // Set name text
-            toInstantiate.transform.GetChild(0).transform.GetChild(0).transform.GetChild(3).GetComponent<TMP_Text>().text = e.Name;
-            // Set portraits
-            toInstantiate.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>().sprite = PartyManager.Instance.GetPortraitByName("Piggy");
-            // Set health and flourish values and update them
-            ValueBar healthBar = toInstantiate.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<ValueBar>();
-            healthBar.maxValue = e.Health;
-            healthBar.UpdateValueBar(e.Health);
-            ValueBar flourishBar = toInstantiate.transform.GetChild(0).transform.GetChild(0).transform.GetChild(2).GetComponent<ValueBar>();
-            flourishBar.maxValue = e.Flourish;
-            flourishBar.UpdateValueBar(e.Flourish);
-        }
-    }
-
-    // A function used to render a particular character's combat menu.
-    public void RenderInputMenu(BasePlayer actingCharacter)
-    {
-        // Render the UI for the input.
-        Debug.Log("Rendering input menu for " + actingCharacter.Name + " now.");
-        
-        // For however many abilities the player has, create action button prefabs and place them as children of combat menu.
-        for (int i = 0; i < actingCharacter.PlayerClass.Abilities.Count; i++)
-        {
-            BaseAbility currentAbility = actingCharacter.PlayerClass.Abilities[i];
-            // Create prefab and update text of button.
-            GameObject toInstantiate = Instantiate(actionButton, combatMenu.transform);
-            toInstantiate.GetComponentInChildren<TMP_Text>().text = currentAbility.Name;
-            // Assign the ability and acting character to the action button script.
-            toInstantiate.GetComponent<ActionButton>().ability = currentAbility;
-            toInstantiate.GetComponent<ActionButton>().actingCharacter = actingCharacter;
-            // // Add on click functions to the buttons to create a PlayerAction queueable.
-            toInstantiate.GetComponent<Button>().onClick.AddListener(() => 
-                {StartCoroutine(SelectTarget(currentAbility, actingCharacter));});
-            // If the ability assigned to the button cannot be executed due to lack of FP, disable it entirely.
-            if (currentAbility.Cost > actingCharacter.Flourish)
-            {
-                toInstantiate.GetComponent<Button>().interactable = false;
-            }
-        }
-    }
 
     // A function used to initialize the combat queue.
-    public void InitCombatQueue(BasePlayer[] party, List<BaseEnemy> enemies)
+    public void InitCombatQueue(List<BasePlayer> party, List<BaseEnemy> enemies)
     {
         // Set private references to party and enemies.
         this.party = party;
@@ -147,7 +77,7 @@ public class CombatManager : MonoBehaviour
         PartyManager.Instance.ToggleInCombat(true);
         // Clean up for new combat scenario.
         combatQueue = new CombatQueue();
-        combatQueue.Clear();
+        combatQueue.Clear();  
         // Add standard functions for start, player input, enemy AI, and end.
         PushAndCreateCombatQueueable(new CombatStart());
         foreach (BasePlayer p in party)
@@ -159,11 +89,24 @@ public class CombatManager : MonoBehaviour
             {
                 PushAndCreateCombatQueueable(new AllyTurn(p));
             }
+            p.BattleModel = GetModelByID(p.ID);
+            p.Anim = p.BattleModel.GetComponent<Animator>();
+            p.Animan = p.BattleModel.GetComponent<CombatAnimationManager>();
         }
         foreach (BaseEnemy e in enemies)
         {
+            e.BattleModel = GetModelByName(e.Name);
+            e.Anim = e.BattleModel.GetComponent<Animator>();
+            e.Animan = e.BattleModel.GetComponent<CombatAnimationManager>();
             PushAndCreateCombatQueueable(new EnemyTurn(e));
         }
+        // Set up combat ui when combat queue is initialized for the first time
+        if (rounds == 1)
+        {
+            CombatUI.Instance.RenderUI();
+        }
+        CombatUI.Instance.RenderQueue();
+        CombatUI.Instance.ResetCombatLog();
         // Flag the DemoManager to begin checking queue.
         EventManager.Instance.InvokeEvent(EventType.CheckQueue, null);
     }
@@ -203,168 +146,238 @@ public class CombatManager : MonoBehaviour
             }
         }
 
-        AddPlayerAction(ability, actingCharacter, targetable);
-    }
-
-    // A function used to destroy all buttons that are children of the combat menu.
-    public void ClearCombatMenu()
-    {
-        for (int i = 0; i < combatMenu.transform.childCount; i++)
+        if (target == "back")
         {
-            GameObject toDestroy = combatMenu.transform.GetChild(i).gameObject;
-            Destroy(toDestroy);
+            Debug.Log("Go back one screen");
+            //reset
+            combatUI.SetActiveCamera(combatUI.OverviewCamera);
+            combatUI.RenderInputMenu(actingCharacter);
         }
-    }
-
-    // A function used to render target buttons.
-    public void RenderTargetButtons()
-    {
-        foreach (BasePlayer p in party)
+        else
         {
-            GameObject toInstantiate = Instantiate(targetButton, combatMenu.transform);
-            toInstantiate.GetComponentInChildren<TMP_Text>().text = p.Name;
-            toInstantiate.GetComponent<TargetButton>().target = p.Name;
-        }
-
-        foreach (BaseEnemy e in enemies)
-        {
-            GameObject toInstantiate = Instantiate(targetButton, combatMenu.transform);
-            toInstantiate.GetComponentInChildren<TMP_Text>().text = e.Name;
-            toInstantiate.GetComponent<TargetButton>().target = e.Name;
+            combatUI.SetActiveCamera(combatUI.OverviewCamera);
+            AddPlayerAction(ability, actingCharacter, targetable);
         }
     }
 
     // A function used to create a PlayerAction queueable and push it to the front of the queue.
     public void AddPlayerAction(BaseAbility ability, BasePlayer actingCharacter, ITargetable target)
     {
-        Debug.Log("Adding player action...");
-        // Create the PlayerAction queueable object for each ability.
-        PlayerAction action = new PlayerAction(ability, actingCharacter, target);
-        // Push the PlayerAction to the front of the queue.
-        combatQueue.PriorityPush(action);
-        // Tell DemoManager to check the queue and complete the action.
-        EventManager.Instance.InvokeEvent(EventType.CheckQueue, null);
+        if (ability.ID == 99)
+        {
+            Debug.Log("Adding player action...");
+            combatQueue.PriorityPush(new InfluenceAllyTurn(actingCharacter, (BasePlayer)target));
+            EventManager.Instance.InvokeEvent(EventType.CheckQueue, null);
+        }
+
+        else
+        {
+            Debug.Log("Adding player action...");
+            // Create the PlayerAction queueable object for each ability.
+            PlayerAction action = new PlayerAction(ability, actingCharacter, target);
+            // Push the PlayerAction to the front of the queue.
+            combatQueue.PriorityPush(action);
+            // Tell DemoManager to check the queue and complete the action.
+            EventManager.Instance.InvokeEvent(EventType.CheckQueue, null);
+        }
     }
 
     // A function used to resolve/apply effects of a PlayerAction queueable.
-    public void ResolvePlayerAction(PlayerAction action)
+    public void DoPlayerAction(PlayerAction action)
     {
+        StartCoroutine(ResolvePlayerAction(action));
+    }
+    public IEnumerator ResolvePlayerAction(PlayerAction action)
+    {
+        // Adjust camera, pause for animations, update game state 
+        combatUI.SetActiveCamera(combatUI.BandCamera);
+        if (action.target is BasePlayer)
+        {
+            combatUI.SetActiveCamera(combatUI.BandCamera);
+            combatUI.BandCamera.m_LookAt = ((BasePlayer)action.target).BattleModel.transform;
+        }
+        else if (action.target is BaseEnemy)
+        {
+            combatUI.SetActiveCamera(combatUI.EnemyCamera);
+            combatUI.EnemyCamera.m_LookAt = ((BaseEnemy)action.target).BattleModel.transform;
+        }
+
+        // play animations if action has one
+        if (action.ability.AbilityAnimationClip != null)
+        {
+            action.actingCharacter.Animan.ReceiveAnimationRequirements(action.ability.AbilityAnimationParticles, action.ability.AbilitySFX);
+            action.actingCharacter.Anim.Play(action.ability.AbilityAnimationClip);
+            yield return new WaitForSeconds(action.actingCharacter.Anim.GetCurrentAnimatorClipInfo(0).Length);
+        }
+        else yield return new WaitForSeconds(3f);
+
+        // If the attack misses, skip this turn
+        if(!AttackHits(action.target))
+        {
+            Debug.Log(action.target.Name + " dodges!");
+            CombatUI.Instance.UpdateCombatLog(action.target.Name + " dodges!");
+            // Tell GameManager to check the queue and continue to next turn.
+            EventManager.Instance.InvokeEvent(EventType.CheckQueue, null);
+            yield return new WaitForSeconds(2);
+        }
+
         // Handle flourish cost and update UI to reflect new value.
         action.actingCharacter.Flourish -= action.ability.Cost;
-        Tuple<ValueBar, ValueBar> relevantValueBars = FindValueBars(action.actingCharacter.Name);
-        relevantValueBars.Item2.UpdateValueBar(action.actingCharacter.Flourish);
+        CombatUI.FindPortrait(action.actingCharacter.Name).flourishBar.UpdateValueBar(action.actingCharacter.Flourish);
 
         if (action.ability.CombatType == BaseAbility.CombatAbilityTypes.ATTACK)
         {
             bool isStrengthened = IsStrengthened(action.actingCharacter);
             int modifiedDamage = isStrengthened ? (action.ability.Damage * 2) : action.ability.Damage;
             action.target.Health -= modifiedDamage;
-            Debug.Log(action.actingCharacter.Name + " deals " + modifiedDamage + " damage to " + action.target.Name + ".");
+            Debug.Log(action.actingCharacter.Name + " deals " + modifiedDamage + " damage to " + action.target.Name + "."); 
+            CombatUI.Instance.UpdateCombatLog(action.actingCharacter.Name + " deals " + modifiedDamage + " damage to " + action.target.Name + ".");
             CheckCombatantsHealth(action.target);
         }
         if (action.ability.CombatType == BaseAbility.CombatAbilityTypes.HEAL)
         {
             bool requiresAssistance = action.target.CiFData.HasStatusType(Status.StatusTypes.REQUIRES_ASSISTANCE);
             action.target.Health += action.ability.Damage;
-            Debug.Log(action.actingCharacter.Name + " heals " + action.target.Name + " for " + action.ability.Damage + " health!" );
-            if (requiresAssistance) 
-            { 
+            Debug.Log(action.actingCharacter.Name + " heals " + action.target.Name + " for " + action.ability.Damage + " health!");
+            CombatUI.Instance.UpdateCombatLog(action.actingCharacter.Name + " heals " + action.target.Name + " for " + action.ability.Damage + " health!");
+            if (requiresAssistance)
+            {
                 action.target.CiFData.RemoveStatusByType(Status.StatusTypes.REQUIRES_ASSISTANCE);
-                DemoManager.Instance.hasAssistedOnce = true; 
-            }; 
+                DemoManager.Instance.hasAssistedOnce = true;
+            };
         }
         if (action.ability.CombatType == BaseAbility.CombatAbilityTypes.DEFEND)
         {
             bool requiresAssistance = action.target.CiFData.HasStatusType(Status.StatusTypes.REQUIRES_ASSISTANCE);
             action.target.Shield += action.ability.Damage;
-            Debug.Log(action.actingCharacter.Name + " is shielding " + action.target.Name + " for " + action.ability.Damage + " damage." );
-            if (requiresAssistance) 
-            { 
+            Debug.Log(action.actingCharacter.Name + " is shielding " + action.target.Name + " for " + action.ability.Damage + " damage.");
+            CombatUI.Instance.UpdateCombatLog(action.actingCharacter.Name + " is shielding " + action.target.Name + " for " + action.ability.Damage + " damage.");
+            if (requiresAssistance)
+            {
                 action.target.CiFData.RemoveStatusByType(Status.StatusTypes.REQUIRES_ASSISTANCE);
-                DemoManager.Instance.hasAssistedOnce = true; 
+                DemoManager.Instance.hasAssistedOnce = true;
             };
         }
         if (action.ability.CombatType == BaseAbility.CombatAbilityTypes.SUPPORT)
         {
-            if (action.ability.ID == 4)
+            switch (action.ability.ID)
             {
-                action.target.CombatStatuses.Add(new CombatStatus(CombatStatus.CombatStatusTypes.STRENGTHENED));
-                Debug.Log($"{action.actingCharacter.Name} has strengthened {action.target.Name}!");
-            } else if (action.ability.ID == 5)
-            {
-                action.target.CombatStatuses.Add(new CombatStatus(CombatStatus.CombatStatusTypes.BLINDED));
-                Debug.Log($"{action.actingCharacter.Name} has blinded {action.target.Name}!");
+                case 4:
+                    action.target.CombatStatuses.Add(new CombatStatus(CombatStatus.CombatStatusTypes.STRENGTHENED));
+                    Debug.Log($"{action.actingCharacter.Name} has strengthened {action.target.Name}!");
+                    CombatUI.Instance.UpdateCombatLog($"{action.actingCharacter.Name} has strengthened {action.target.Name}!");
+                    break;
+                case 5:
+                    action.target.CombatStatuses.Add(new CombatStatus(CombatStatus.CombatStatusTypes.BLINDED));
+                    Debug.Log($"{action.actingCharacter.Name} has blinded {action.target.Name}!");
+                    CombatUI.Instance.UpdateCombatLog($"{action.actingCharacter.Name} has blinded {action.target.Name}!");
+                    break;
             }
         }
         // Handle damage/heal and update UI to reflect new value.
-        relevantValueBars = FindValueBars(action.target.Name);
-        relevantValueBars.Item1.UpdateValueBar(action.target.Health);
+        
+        PortraitData targetPortrait = CombatUI.FindPortrait(action.target.Name);
+        targetPortrait.anim.SetTrigger("takeDamage");
+        targetPortrait.healthBar.UpdateValueBar(action.target.Health);
+
+        //Update UI to reflect current Virtuoso value
+        if (combatUI.V < CombatUI.Instance.virtData.healthBar.maxValue + 1)
+        {
+            CombatUI.Instance.virtData.healthBar.UpdateValueBar(combatUI.V);
+        }
+
+        if (action.ability.AbilityAnimationClip != null && action.target.Health > 0)
+        {
+            action.target.Anim.Play(action.ability.AbilityReactionAnimationClip);
+            yield return new WaitForSeconds(action.target.Anim.GetCurrentAnimatorClipInfo(0).Length);
+        }
+        else yield return new WaitForSeconds(2);
+        //Debug.Log("pauuseeee");
 
         // Tell DemoManager to check the queue and continue to next turn.
         EventManager.Instance.InvokeEvent(EventType.CheckQueue, null);
     }
 
-    // A function that finds and returns a tuple of ValueBar objects (health, flourish) 
-    // corresponding to a string name of a character.
-    Tuple<ValueBar, ValueBar> FindValueBars(string name)
+    public void DoEnemyAction()
     {
-        Tuple<ValueBar, ValueBar> relevantBars = new Tuple<ValueBar, ValueBar>(null, null);
-        for (int i = 0; i < partyPortraits.transform.childCount; i++)
-        {
-            Transform currentChild = partyPortraits.transform.GetChild(i);
-            Transform desiredChild = currentChild.transform.GetChild(0).transform.GetChild(0).transform.GetChild(3);
-            ValueBar healthBar = currentChild.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).gameObject.GetComponent<ValueBar>();
-            ValueBar flourishBar = currentChild.transform.GetChild(0).transform.GetChild(0).transform.GetChild(2).gameObject.GetComponent<ValueBar>();;
-            if (desiredChild.GetComponent<TMP_Text>().text == name)
-            {
-                relevantBars = new Tuple<ValueBar, ValueBar>(healthBar, flourishBar);
-            }
-        }
-
-        for (int i = 0; i < enemyPortraits.transform.childCount; i++)
-        {
-            Transform currentChild = enemyPortraits.transform.GetChild(i);
-            Transform desiredChild = currentChild.transform.GetChild(0).transform.GetChild(0).transform.GetChild(3);
-            ValueBar healthBar = currentChild.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).gameObject.GetComponent<ValueBar>();
-            ValueBar flourishBar = currentChild.transform.GetChild(0).transform.GetChild(0).transform.GetChild(2).gameObject.GetComponent<ValueBar>();;
-            if (desiredChild.GetComponent<TMP_Text>().text == name)
-            {
-                relevantBars = new Tuple<ValueBar, ValueBar>(healthBar, flourishBar);
-            }
-        }
-        return relevantBars;
+        StartCoroutine(TakeEnemyAction());
     }
-
     // A function used to calculate and push enemy actions to the queue.
-    public void TakeEnemyAction()
+    public IEnumerator TakeEnemyAction()
     {
+        //Handle camera switching
+        //combatUI.BandCamera.SetActive(false);
+        //combatUI.EnemyCamera.SetActive(true);
+
         Debug.Log("Calculating enemy action...");
         BaseEnemy actingCharacter = (BaseEnemy)EventManager.Instance.EventData;
         
         // TODO: This AI is very simple. Should change to be more interesting.
         // Choose random party member and use Attack ability.
         BasePlayer target = null;
-        if ( party.Length > 0) { target = party[UnityEngine.Random.Range(0, party.Length)]; };
+        if ( party.Count > 0) { target = party[UnityEngine.Random.Range(0, party.Count)]; };
         BaseAbility ability = actingCharacter.EnemyClass.Abilities[0];
-        if ( target == null ) { CheckForWinLoss(); return; } 
+        if ( target == null )
+        {
+            CheckForWinLoss();
+            //return?
+        }
+
+        // Adjust camera, pause for animations, update game state 
+        // TODO: Change from WaitForSeconds length to acting characters action animation length
+        combatUI.SetActiveCamera(combatUI.BandCamera);
+        combatUI.BandCamera.m_LookAt = target.BattleModel.transform;
+
+        // play animations if action has one
+        if (ability.AbilityAnimationClip != null)
+        {
+            actingCharacter.Animan.ReceiveAnimationRequirements(ability.AbilityAnimationParticles, ability.AbilitySFX);
+            actingCharacter.Anim.Play(ability.AbilityAnimationClip);
+            yield return new WaitForSeconds(actingCharacter.Anim.GetCurrentAnimatorClipInfo(0).Length);
+        }
+        else yield return new WaitForSeconds(3f);
+
         bool isBlind = IsBlind(actingCharacter);
-        if (!isBlind)
+        bool attackHits = AttackHits(target);
+        if (!isBlind && attackHits)
         {
             ApplyEffects(actingCharacter, target, ability);
         } else 
         {
             Debug.Log($"{actingCharacter.Name} tried to attack {target.Name}, but missed!");
+            CombatUI.Instance.UpdateCombatLog($"{actingCharacter.Name} tried to attack {target.Name}, but missed!");
             actingCharacter.RemoveCombatStatus(CombatStatus.CombatStatusTypes.BLINDED);
         }
 
+        if (ability.AbilityAnimationClip != null && target.Health > 0)
+        {
+            target.Anim.Play(ability.AbilityReactionAnimationClip);
+            yield return new WaitForSeconds(target.Anim.GetCurrentAnimatorClipInfo(0).Length);
+        }
+        else yield return new WaitForSeconds(2);
+
         actingCharacter.OwnsTurn = false;
+
         // Tell DemoManager to check the queue and continue to next turn.
-        EventManager.Instance.InvokeEvent(EventType.CheckQueue, null); 
+        EventManager.Instance.InvokeEvent(EventType.CheckQueue, null);
+
+        //Handle camera switching
+        //combatUI.OverviewCamera.SetActive(false);
+        //combatUI.EnemyCamera.SetActive(false);
+        //combatUI.BandCamera.SetActive(true);
     }
 
     // A function used to calculate and push ally actions to the queue.
-    public void TakeAllyAction()
+    public void DoAllyAction()
     {
+        StartCoroutine(TakeAllyAction());
+    }
+    public IEnumerator TakeAllyAction()
+    {
+        //Handle camera switching
+        //combatUI.EnemyCamera.SetActive(false);
+        //combatUI.BandCamera.SetActive(true);
+
         Debug.Log("Calculating ally action...");
         BasePlayer actingCharacter = (BasePlayer)EventManager.Instance.EventData;
         BaseEnemy target;
@@ -377,23 +390,49 @@ public class CombatManager : MonoBehaviour
             ability = actingCharacter.PlayerClass.Abilities[0];
         } else {
             CheckForWinLoss();
-            return;
+            yield break;
         }
+
+        // Adjust camera, pause for animations, update game state 
+        // TODO: Change from WaitForSeconds length to acting characters action animation length
+        combatUI.SetActiveCamera(combatUI.EnemyCamera);
+        combatUI.EnemyCamera.m_LookAt = target.BattleModel.transform;
+
+        // play animations if action has one
+        if (ability.AbilityAnimationClip != null)
+        {
+            actingCharacter.Animan.ReceiveAnimationRequirements(ability.AbilityAnimationParticles, ability.AbilitySFX);
+            actingCharacter.Anim.Play(ability.AbilityAnimationClip);
+            yield return new WaitForSeconds(actingCharacter.Anim.GetCurrentAnimatorClipInfo(0).Length);
+        }
+        else yield return new WaitForSeconds(3f);
 
         // Apply effects of ability, log the outcome, update value bar of target.
         bool isStrengthened = IsStrengthened(actingCharacter);
         int modifiedDamage = isStrengthened ? (ability.Damage * 2) : ability.Damage;
         target.Health -= modifiedDamage;
         Debug.Log(actingCharacter.Name + " deals " + modifiedDamage + " damage to " + target.Name + "!");
-        Tuple<ValueBar, ValueBar> relevantValueBars = FindValueBars(target.Name);
-        relevantValueBars.Item1.UpdateValueBar(target.Health);
+        CombatUI.Instance.UpdateCombatLog(actingCharacter.Name + " deals " + modifiedDamage + " damage to " + target.Name + "!");
+        PortraitData targetPortrait = CombatUI.FindPortrait(target.Name);
+        targetPortrait.anim.SetTrigger("takeDamage");
+        targetPortrait.healthBar.UpdateValueBar(target.Health);
         CheckCombatantsHealth(target);
 
         if ( isStrengthened ) { actingCharacter.RemoveCombatStatus(CombatStatus.CombatStatusTypes.STRENGTHENED); };
+
+        if (ability.AbilityAnimationClip != null && target.Health > 0)
+        {
+            target.Anim.Play(ability.AbilityReactionAnimationClip);
+            yield return new WaitForSeconds(target.Anim.GetCurrentAnimatorClipInfo(0).Length);
+        }
+        else yield return new WaitForSeconds(2);
         actingCharacter.OwnsTurn = false;
+
         // Tell DemoManager to check the queue and continue to next turn.
         EventManager.Instance.InvokeEvent(EventType.CheckQueue, null); 
     }
+
+
 
     // A function used to determine if any combatants are at 0 health; i.e., downed.
     public void CheckCombatantsHealth(ITargetable target)
@@ -401,6 +440,7 @@ public class CombatManager : MonoBehaviour
         if (target.Health <= 0)
         {
             Debug.Log(target.Name + " was downed in the gig!");
+            CombatUI.Instance.UpdateCombatLog(target.Name + " was downed in the gig!");
             RemoveCharacterFromCombat(target);
         }
     }
@@ -409,24 +449,25 @@ public class CombatManager : MonoBehaviour
     public void RemoveCharacterFromCombat(ITargetable character)
     {
         ICombatQueueable[] array = combatQueue.queue.ToArray();
-        Tuple<BasePlayer, BaseEnemy> parsedCharacter = ParseTargetable(character);
+        ITargetable parsedCharacter = ParseTargetable(character);
         ApplyDeathAnimation(parsedCharacter);
         // Remove instance of character from appropriate list and ensure no turns in the queue belong to the downed character.
-        if (parsedCharacter.Item1 != null)
+        if (parsedCharacter is BasePlayer)
         {
-            BasePlayer[] partyCopy = party.Where(x => x != parsedCharacter.Item1).ToArray();
+            List<BasePlayer> partyCopy = new List<BasePlayer>();
+            partyCopy.AddRange(party.Where(x => x != parsedCharacter));
             party = partyCopy;
             // Update UI to no longer show character portrait.
-            for (int i = 0; i < partyPortraits.transform.childCount; i++)
+            for (int i = 0; i < CombatUI.Instance.partyPortraits.transform.childCount; i++)
             {
-                Transform currentChild = partyPortraits.transform.GetChild(i);
-                Transform desiredChild = currentChild.transform.GetChild(0).transform.GetChild(0).transform.GetChild(3);
-                if (desiredChild.GetComponent<TMP_Text>().text == character.Name)
+                PortraitData currentChild = CombatUI.Instance.partyPortraits.transform.GetChild(i).GetComponent<PortraitData>();
+
+                if (currentChild.nameText.text == character.Name)
                 {
                     Destroy(currentChild.gameObject);
                 }
             }
-            if (parsedCharacter.Item1.ID == 0)
+            if (((BasePlayer)parsedCharacter).ID == 0)
             {
                 foreach (ICombatQueueable q in array)
                 {
@@ -446,16 +487,16 @@ public class CombatManager : MonoBehaviour
                 }
             }
         }
-        if (parsedCharacter.Item2 != null)
+        if (parsedCharacter is BaseEnemy)
         {
-            Debug.Log("Attempting to remove " + parsedCharacter.Item2.Name);
-            enemies.Remove(parsedCharacter.Item2);
+            Debug.Log("Attempting to remove " + parsedCharacter.Name);
+            enemies.Remove((BaseEnemy)parsedCharacter);
             // Update UI to no longer show character portrait.
-            for (int i = 0; i < enemyPortraits.transform.childCount; i++)
+            for (int i = 0; i < CombatUI.Instance.enemyPortraits.transform.childCount; i++)
             {
-                Transform currentChild = enemyPortraits.transform.GetChild(i);
-                Transform desiredChild = currentChild.transform.GetChild(0).transform.GetChild(0).transform.GetChild(3);
-                if (desiredChild.GetComponent<TMP_Text>().text == character.Name)
+                PortraitData currentChild = CombatUI.Instance.enemyPortraits.transform.GetChild(i).GetComponent<PortraitData>();
+
+                if (currentChild.nameText.text == character.Name)
                 {
                     Destroy(currentChild.gameObject);
                 }
@@ -466,7 +507,7 @@ public class CombatManager : MonoBehaviour
                 if (q.GetType() == typeof(EnemyTurn))
                 {
                     EnemyTurn t = (EnemyTurn)q;
-                    if (t.actingCharacter == parsedCharacter.Item2)
+                    if (t.actingCharacter == parsedCharacter)
                     {
                         combatQueue.Remove(q);
                     }
@@ -480,7 +521,7 @@ public class CombatManager : MonoBehaviour
     // A function used to determine a win/loss of combat.
     public void CheckForWinLoss() 
     {
-        if (party.Length == 0)
+        if (party.Count == 0)
         {
             Debug.Log("Player has lost!");
             EventManager.Instance.InvokeEvent(EventType.CombatLoss, null);
@@ -494,21 +535,21 @@ public class CombatManager : MonoBehaviour
 
     // A helper function used to return a Tuple<BasePlayer, BaseEnemy> from an ITargetable object.
     // TODO: This is pretty hacky. Find a better solution.
-    public Tuple<BasePlayer, BaseEnemy> ParseTargetable(ITargetable character)
+    public ITargetable ParseTargetable(ITargetable character)
     {
-        Tuple<BasePlayer, BaseEnemy> output = new Tuple<BasePlayer, BaseEnemy>(null, null);
+        ITargetable output = null;
         foreach (BasePlayer p in party)
         {
             if (p.Name == character.Name)
             {
-                output = new Tuple<BasePlayer, BaseEnemy>(p, null);
+                output = p;
             }
         }
         foreach (BaseEnemy e in enemies)
         {
             if (e.Name == character.Name)
             {
-                output = new Tuple<BasePlayer, BaseEnemy>(null, e);
+                output = e;
             }
         }
         return output;
@@ -516,15 +557,19 @@ public class CombatManager : MonoBehaviour
 
     public void ApplyEffects(BaseEnemy actingCharacter, BasePlayer target, BaseAbility ability)
     {
+
         bool targetIsProtected = IsProtected(target);
-        if (targetIsProtected && party.Length > 1) 
+        if (targetIsProtected && party.Count > 1) 
         {
-            Debug.Log(target.Name + " has a PROTECTED status effect"); 
+            Debug.Log(target.Name + " has a PROTECTED status effect");
+            CombatUI.Instance.UpdateCombatLog(target.Name + " has a PROTECTED status effect"); 
             target.RemoveCombatStatus(CombatStatus.CombatStatusTypes.PROTECTED);
             ITargetable newTarget = AcquireProtectingTarget();
             Debug.Log(newTarget.Name + " has a PROTECTING status effect");
+            CombatUI.Instance.UpdateCombatLog(newTarget.Name + " has a PROTECTING status effect");
             newTarget.RemoveCombatStatus(CombatStatus.CombatStatusTypes.PROTECTING);
             Debug.Log(actingCharacter.Name + " tried attacking " + target.Name + ", but " + newTarget.Name + " protected them!");
+            CombatUI.Instance.UpdateCombatLog(actingCharacter.Name + " tried attacking " + target.Name + ", but " + newTarget.Name + " protected them!");
             target = (BasePlayer)newTarget;
         }
 
@@ -535,22 +580,35 @@ public class CombatManager : MonoBehaviour
             {
                 target.Shield -= ability.Damage;
                 Debug.Log(actingCharacter.Name + " deals " + ability.Damage + " damage to " + target.Name + "'s shield!");
+                CombatUI.Instance.UpdateCombatLog(actingCharacter.Name + " deals " + ability.Damage + " damage to " + target.Name + "'s shield!");
             } else 
             {
                 int overflow = ability.Damage - target.Shield;
                 target.Shield = 0;
                 target.Health -= overflow;
                 Debug.Log(actingCharacter.Name + " destroys " + target.Name + "'s shield, and deals " + overflow + " damage to " + target.Name + "!");
+                CombatUI.Instance.UpdateCombatLog(actingCharacter.Name + " destroys " + target.Name + "'s shield, and deals " + overflow + " damage to " + target.Name + "!");
             }
         } else 
         {
             target.Health -= ability.Damage;
             Debug.Log(actingCharacter.Name + " deals " + ability.Damage + " damage to " + target.Name + "!");
+            CombatUI.Instance.UpdateCombatLog(actingCharacter.Name + " deals " + ability.Damage + " damage to " + target.Name + "!");
         }
 
-        Tuple<ValueBar, ValueBar> relevantValueBars = FindValueBars(target.Name);
-        relevantValueBars.Item1.UpdateValueBar(target.Health);
+        PortraitData targetPortrait = CombatUI.FindPortrait(target.Name);
+        targetPortrait.anim.SetTrigger("takeDamage");
+        targetPortrait.healthBar.UpdateValueBar(target.Health);
         CheckCombatantsHealth(target);
+    }
+
+    bool AttackHits(ITargetable target)
+    {
+        int threshold = 100 - target.Elan;
+        Debug.Log("Threshold: " + threshold);
+        int randomInt = UnityEngine.Random.Range(1, 101);
+        Debug.Log("Random Int: " + randomInt);
+        return (randomInt < threshold);
     }
 
     private bool IsBlind(ITargetable actingCharacter)
@@ -607,16 +665,16 @@ public class CombatManager : MonoBehaviour
         return result.First();
     }
 
-    private void ApplyDeathAnimation(Tuple<BasePlayer, BaseEnemy> parsedCharacter)
+    private void ApplyDeathAnimation(ITargetable parsedCharacter)
     {
         GameObject model = null;
-        if (parsedCharacter.Item1 != null)
+        if (parsedCharacter is BasePlayer)
         {
-            model = GetModelByID(parsedCharacter.Item1.ID);
+            model = ((BasePlayer)parsedCharacter).BattleModel;
         }
-        if (parsedCharacter.Item2 != null)
+        if (parsedCharacter is BaseEnemy)
         {
-            model = GetModelByName(parsedCharacter.Item2.Name);
+            model = ((BaseEnemy)parsedCharacter).BattleModel;
         }
 
         Animator animator = model.GetComponent<Animator>();

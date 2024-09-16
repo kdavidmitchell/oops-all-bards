@@ -49,6 +49,7 @@ public class CombatQueue
                 this.queue.Enqueue(item);
             }
         }
+        CombatUI.Instance.RenderRemove(queueable);
     }
 
     public bool IsEmpty()

@@ -97,7 +97,7 @@ public class ActionManager : MonoBehaviour
         if (response.msg == "Quip")
         {
             UnityMainThreadDispatcher.Instance().Enqueue(() => {
-                DialogueManager.Instance.ChooseAppropriateQuip(response.data.actingCharacter, response.data.inCombat);
+            DialogueManager.Instance.ChooseAppropriateQuip(response.data.actingCharacter, response.data.inCombat);
             });
         }
     } 

@@ -7,7 +7,7 @@ public class LocationTrigger : MonoBehaviour, IInteractable
     public int questStage;
     public int dialogueToTrigger;
     private bool triggering;
-    private bool hasExecuted = false;
+    public bool hasExecuted = false;
 
     public void Execute()
     {
@@ -17,6 +17,7 @@ public class LocationTrigger : MonoBehaviour, IInteractable
 
     void Update()
     {
+        //gameObject.Find<DialogueManager>().test
         if (triggering && !hasExecuted)
         {
             Execute();

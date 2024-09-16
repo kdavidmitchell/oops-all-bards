@@ -7,6 +7,7 @@ import org.json.simple.JSONValue;
 
 import abl.generated.GameAgent;
 import abl.wmes.AllyWME;
+import abl.wmes.VivWME;
 import handler.*;
 /**
  * This program demonstrates a simple TCP/IP socket server.
@@ -53,7 +54,7 @@ public class TCPServer {
     		}
     	}.start();
 		
-		int port = 5000;
+		int port = 8000;
         try (ServerSocket serverSocket = new ServerSocket(port)) {
 
             System.out.println("Server is listening on port " + port);
@@ -99,6 +100,13 @@ public class TCPServer {
     		AllyWME wme = (AllyWME) toHandle.parseData();
     		agent.addWME(wme);
     	}
+
+		if (toHandle.code == 2) {
+			VivWME wme = (VivWME) toHandle.parseData();
+			agent.addWME(wme);
+			System.out.println("Received VivWME.");
+			System.out.println(wme.toString());
+		}
     }
     
     public void sendOutgoingMessage(JSONObject jo) {

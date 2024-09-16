@@ -9,6 +9,7 @@ public class CharacterCreationManager : MonoBehaviour
     public GameObject step1;
     public GameObject step2;
     public GameObject step3;
+    public GameObject errorMessage;
     public ModelViewer modelViewer;
     public ClassViewer classViewer;
     public TMP_InputField nameInputField;
@@ -42,8 +43,21 @@ public class CharacterCreationManager : MonoBehaviour
             ToggleGameObject(step3);
         } else
         {
-            SetPlayerName(nameInputField.text);
-            ExitCharacterCreationScene();
+            //This if statement prevents player from skipping putting in a name
+            if (string.IsNullOrEmpty(nameInputField.text))
+            {
+                //Display error message
+                errorMessage.SetActive(true);
+                ToggleGameObject(step3);
+                ToggleGameObject(step3);
+
+            }
+            else
+            {
+                errorMessage.SetActive(false);
+                SetPlayerName(nameInputField.text);
+                ExitCharacterCreationScene();
+            }
         }
     }
 
@@ -59,8 +73,9 @@ public class CharacterCreationManager : MonoBehaviour
         FinalizePlayerData(playerData.PlayerClass);
         DataManager.Instance.PlayerData = playerData;
         DataManager.Instance.SavePlayerData();
-        // SceneManager.LoadScene("TavernDemo");
-        fader.FadeToLevel("TavernDemo");
+        //SceneManager.LoadScene("TavernDemo"); 
+
+        fader.FadeToLevel("VillageSample"); //TAVERNDEMO
     }
 
     void SetPlayerModel(GameObject model)
@@ -82,5 +97,7 @@ public class CharacterCreationManager : MonoBehaviour
     {
         playerData.Health = 15;
         playerData.Flourish = 10;
+        BaseAbility influence = new BaseAbility("Influence", 99, "Suggest a plan of action for an Ally. Results may vary.", BaseAbility.AbilityTypes.COMBAT, BaseAbility.CombatAbilityTypes.SUPPORT, 0, 0, 1, 1);
+        playerData.PlayerClass.Abilities.Add(influence);
     }
 }

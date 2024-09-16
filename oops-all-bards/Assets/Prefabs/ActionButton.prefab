@@ -316,3 +316,4 @@ MonoBehaviour:
     ownsTurn: 0
     combatStatuses: []
     model: {fileID: 0}
+    battleModel: {fileID: 0}

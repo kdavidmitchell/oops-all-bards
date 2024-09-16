@@ -9,16 +9,19 @@ public class BaseEnemy : ITargetable
     private int health;
     private int flourish;
     private int shield;
+    private int elan;
     private BaseClass enemyClass;
     private bool ownsTurn;
     private List<CombatStatus> combatStatuses = new List<CombatStatus>();
+    GameObject battleModel;
 
-    public BaseEnemy(string name, int health, int flourish, int shield, BaseClass enemyClass)
+    public BaseEnemy(string name, int health, int flourish, int shield, int elan, BaseClass enemyClass)
     {
         this.name = name;
         this.health = health;
         this.flourish = flourish;
         this.shield = shield;
+        this.elan = elan;
         this.enemyClass = enemyClass;
     }
 
@@ -46,6 +49,12 @@ public class BaseEnemy : ITargetable
         set { this.shield = value; }
     }
 
+    public override int Elan
+    {
+        get { return this.elan; }
+        set { this.elan = value; }
+    }
+
     public BaseClass EnemyClass
     {
         get { return this.enemyClass; }
@@ -56,6 +65,12 @@ public class BaseEnemy : ITargetable
     {
         get { return this.ownsTurn; }
         set { this.ownsTurn = value; }
+    }
+
+    public GameObject BattleModel
+    {
+        get { return this.battleModel; }
+        set { this.battleModel = value; }
     }
 
     public override List<CombatStatus> CombatStatuses

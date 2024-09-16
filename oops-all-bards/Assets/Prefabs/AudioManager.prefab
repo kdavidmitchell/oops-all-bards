@@ -1,0 +1,108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5807683789005088190
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5807683789005088177}
+  - component: {fileID: 5807683789005088176}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5807683789005088177
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5807683789005088190}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5807683789005088176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5807683789005088190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c93fbb8445db3f64eb6147e13118fcc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musicMixerGroup: {fileID: 1407871675958838370, guid: a325a2c71e11f02429f444b638f1297c,
+    type: 2}
+  sfxMixerGroup: {fileID: 8246582054924226083, guid: a325a2c71e11f02429f444b638f1297c,
+    type: 2}
+  musicTracks:
+  - clip: {fileID: 8300000, guid: 915cdb53ee74f2d41a03ccb02517d333, type: 3}
+    audioSource: {fileID: 0}
+    title: thehauntedhearth
+    volume: 1
+    pitchLower: 1
+    pitchUpper: 1
+    loop: 1
+  - clip: {fileID: 8300000, guid: 3bfe9cc1b9ec1234694a8b7c4dd2c6ac, type: 3}
+    audioSource: {fileID: 0}
+    title: buzzy
+    volume: 1
+    pitchLower: 1
+    pitchUpper: 1
+    loop: 1
+  - clip: {fileID: 8300000, guid: 277bdbdb052f9414f84fcd7e2e3fc64b, type: 3}
+    audioSource: {fileID: 0}
+    title: landoffantasy
+    volume: 1
+    pitchLower: 1
+    pitchUpper: 1
+    loop: 1
+  sfxClips:
+  - clip: {fileID: 8300000, guid: 85faddbdd9875e04d8a3ccea2e36f5a1, type: 3}
+    audioSource: {fileID: 0}
+    title: guitarattack1
+    volume: 1
+    pitchLower: 1
+    pitchUpper: 1
+    loop: 0
+  - clip: {fileID: 8300000, guid: 55d631f66446a1c4bb57557f13098c3c, type: 3}
+    audioSource: {fileID: 0}
+    title: guitarattack2
+    volume: 1
+    pitchLower: 1
+    pitchUpper: 1
+    loop: 0
+  - clip: {fileID: 8300000, guid: bb536325aeaf7694688e03372d8a7368, type: 3}
+    audioSource: {fileID: 0}
+    title: pianoattack1
+    volume: 1
+    pitchLower: 0.5
+    pitchUpper: 1.3
+    loop: 0
+  - clip: {fileID: 8300000, guid: 0b0c5cb41138e23408d627de5501c204, type: 3}
+    audioSource: {fileID: 0}
+    title: pianoattack2
+    volume: 1
+    pitchLower: 0.5
+    pitchUpper: 1.3
+    loop: 0
+  - clip: {fileID: 8300000, guid: bc899c19c6de3c743a8e22bdef53e346, type: 3}
+    audioSource: {fileID: 0}
+    title: click
+    volume: 1
+    pitchLower: 0.5
+    pitchUpper: 1.5
+    loop: 0

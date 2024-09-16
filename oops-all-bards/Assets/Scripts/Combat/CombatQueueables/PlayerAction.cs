@@ -10,10 +10,14 @@ public class PlayerAction : MonoBehaviour, ICombatQueueable
     public ITargetable target { get; set; }
     public void Execute()
     {
+       
         Debug.Log("Executing " + actingCharacter.Name + "'s " + ability.Name + " action on " + target.Name + ".");
-        CombatManager.Instance.ResolvePlayerAction(this);
+
+        CombatManager.Instance.DoPlayerAction(this); //edited for camera
+            
         actingCharacter.OwnsTurn = false;
         done = true;
+        
     }
 
     public PlayerAction(BaseAbility ability, BasePlayer actingCharacter, ITargetable target)
@@ -22,4 +26,6 @@ public class PlayerAction : MonoBehaviour, ICombatQueueable
         this.actingCharacter = actingCharacter;
         this.target = target;
     }
+
+    
 }

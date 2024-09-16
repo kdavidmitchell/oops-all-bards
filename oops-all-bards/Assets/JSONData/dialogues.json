@@ -322,6 +322,60 @@
                     ]
                 }
             ]
+        },  
+        {
+            "id": 5,
+            "speakerName": "Herbalist",
+            "exhausted": false,
+            "dialogueNodes":
+            [
+                {
+                    "id": 0,
+                    "nodeText": "Ignore any skeletons you see poking out of the crop be- oh you need something?",
+                    "nodeResponses":
+                    [
+                        {
+                            "nodeResponseText": "Buy",
+                            "nextNode": -1
+                        },
+                        {
+                            "nodeResponseText": "Leave",
+                            "nextNode": -1
+                        }
+                    ]
+                },
+                {
+					"id": 1,
+                    "nodeText": "To herb or not to herb? That is the question.",
+                    "nodeResponses":
+                    [
+                        {
+                            "nodeResponseText": "Buy",
+                            "nextNode": -1
+                        },
+                        {
+                            "nodeResponseText": "Leave",
+                            "nextNode": -1
+                        }
+                    ]
+                },
+                {
+                	"id": 2,
+                    "nodeText": "You want plants? I have plants. I also have things made with plants if you’re so inclined.",
+                    "nodeResponses":
+                    [
+                        {
+                            "nodeResponseText": "Buy",
+                            "nextNode": -1
+                        },
+                        {
+                            "nodeResponseText": "Leave",
+                            "nextNode": -1
+                        }
+                    ]
+                }
+            ]
         }
+        
     ]
 }

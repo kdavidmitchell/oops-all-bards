@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5555139112849115071
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5555139112849115069}
+  - component: {fileID: 5555139112849115068}
+  m_Layer: 0
+  m_Name: EnemyFactory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5555139112849115069
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5555139112849115071}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5555139112849115068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5555139112849115071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5839cf82d0de46d41bad39a91db99ec7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyModelPrefabs:
+  - {fileID: 1140322766594170, guid: 084d983feb3cc754a8dc6647297cd52f, type: 3}
+  - {fileID: 182532, guid: 7ddd5b27ab7654c40949fb96e05807cf, type: 3}
+  - {fileID: 169604, guid: 507f5dc602b42c549a32a51aa9236bb1, type: 3}
+  - {fileID: 183992, guid: 5e2584a852ef63142b40e217afbf01bc, type: 3}
+  - {fileID: 193144, guid: c4f65cc2474b3f1438e9c9389c03822b, type: 3}
+  enemyDataList:
+  - {fileID: 11400000, guid: fea20b433af93f14493e7d4a6ce76a48, type: 2}
+  - {fileID: 11400000, guid: 3c8699dcc31f7634383eddfbd4a9e34b, type: 2}
+  enemyTransforms:
+  - {fileID: 0}
+  - {fileID: 0}
+  runtimeAnimatorController: {fileID: 9100000, guid: 1a11c41fa98154a4ebfc7b664182fb10,
+    type: 2}
+  enemyNumber: 0
+  enemyNames:
+  - Devotee
+  - Fanatic
+  - Advocate
+  - Follower
+  - Recruit

@@ -10,7 +10,8 @@ public class StartMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        AudioManager.Instance.PlayMusicTrack("landoffantasy");
+        AudioManager.Instance.PlaySoundEffect("guitarattack1");
     }
 
     // Update is called once per frame

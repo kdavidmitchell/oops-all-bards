@@ -1,0 +1,26 @@
+{
+    "supertasks":
+    [
+        {
+            "name": "SabotagePlayer",
+            "behaviors":
+            [
+                {
+                    "name": "DuelPlayer",
+                    "assumptions":
+                    [
+                        {
+                            
+                        }
+                    ]
+                },
+                {
+                    "name": "RefuseHelp"
+                },
+                {
+
+                }
+            ]
+        }
+    ]
+}

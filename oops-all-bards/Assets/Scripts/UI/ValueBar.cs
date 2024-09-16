@@ -30,7 +30,8 @@ public class ValueBar : MonoBehaviour
         float ratio = (float)newValue / (float)maxValue;
         textComponent = gameObject.GetComponentInChildren<TMP_Text>();
         fillComponent = gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<Image>();
-        textComponent.text = newValue.ToString() + " / " + maxValue;
+        //textComponent.text = newValue.ToString() + " / " + maxValue;
+        textComponent.text = newValue.ToString();
         fillComponent.GetComponent<RectTransform>().localScale = new Vector3(ratio, 1, 1);
     }
 }

@@ -43,8 +43,8 @@ public class QuestManager : MonoBehaviour
     private void RenderQuest()
     {
         Quest quest = jsonReader.quests.GetQuest(currentQuest);
-        GameObject questToRender = Instantiate(questPrefab, questUI.transform.position, Quaternion.identity);
-        questToRender.transform.SetParent(questUI.transform, true);
+        GameObject questToRender = Instantiate(questPrefab, Vector3.zero, Quaternion.identity);
+        questToRender.transform.SetParent(questUI.transform, false);
         questToRender.transform.Find("QuestName").GetComponent<TMP_Text>().text = quest.Name;
         questToRender.transform.Find("QuestStageText").GetComponent<TMP_Text>().text = quest.Stages[currentQuestStage].DisplayText;
         UpdateQuestMarker(quest, false);

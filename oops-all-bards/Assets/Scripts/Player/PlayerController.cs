@@ -12,7 +12,9 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-    	player = gameObject;
+        //Sets camera to be a child of the player
+        GameObject.FindWithTag("MainCamera").transform.parent = gameObject.transform;
+        player = gameObject;
         animator = player.GetComponent<Animator>();
     }
  

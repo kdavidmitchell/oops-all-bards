@@ -9,6 +9,9 @@ ModelImporter:
   - first:
       74: -203655887218126122
     second: mixamo.com
+  - first:
+      74: -5146411458916460648
+    second: genericAfflictedTEMP
   externalObjects: {}
   materials:
     materialImportMode: 2

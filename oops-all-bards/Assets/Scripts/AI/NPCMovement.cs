@@ -9,12 +9,14 @@ public class NPCMovement : MonoBehaviour
     private NavMeshAgent agent;
     private Animator animator;
     private bool hasMovingTarget = false;
+    private PositionTracker pt;
 
     // Start is called before the first frame update
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+        pt = new PositionTracker(gameObject.name);
     }
 
     void Update()
@@ -27,6 +29,8 @@ public class NPCMovement : MonoBehaviour
                 animator.SetBool("isMoving", false);
                 hasMovingTarget = false;
             }
+            // Update NPC's position in NPC data
+            pt.updatePosition(transform.position);
         }
     }
 

@@ -14,7 +14,6 @@ public class TavernManager : MonoBehaviour
     void Awake()
     {
         SpawnPlayer();
-        AudioManager.Instance.ChangeTrack(1);
         CheckDialogueUI();
         CheckPartyUI();
         TCPTestClient.Instance.RefreshWMEs();
@@ -23,16 +22,28 @@ public class TavernManager : MonoBehaviour
     // Update is called once per frame
     void Start()
     {
+
+        AudioManager.Instance.PlayMusicTrack("thehauntedhearth");
+        //It would seem that when a new scene is loaded that these scripts must be made sure to be ON as to avoid bugs with other code
+        //Prevents camera floating bug
+        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().enabled = true;
+        GameObject.Find("Main Camera").GetComponent<CameraController>().enabled = true;
+
         playerModel = GameObject.FindGameObjectWithTag("Player");
         quintonModel = GameObject.Find("Quinton");
-        if (DemoManager.Instance.tavernVisits == 2)
+        if (GameManager.Instance.tavernVisits == 2)
         {
+            //Prevents bad bug when going in the backrooms after the first fight
+            Destroy(GameObject.Find("QuintonQuestTrigger")); 
             StartCoroutine(DemoResolution());
         }
+
     }
+
 
     void SpawnPlayer()
     {
+
         // Instantiate chosen player model at spawn point.
         BasePlayer playerData = DataManager.Instance.PlayerData;
         GameObject toInstantiate = Instantiate(playerData.Model, playerSpawnPoint.transform.position, Quaternion.identity);
@@ -47,6 +58,8 @@ public class TavernManager : MonoBehaviour
         a.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Controllers/Player");
         // Add player tag.
         toInstantiate.tag = "Player";
+        Cursor.lockState = CursorLockMode.Locked; //testing
+
     }
 
     void CheckDialogueUI()
@@ -107,14 +120,18 @@ public class TavernManager : MonoBehaviour
     public void AssignDialogueUIToManager()
     {
         DialogueManager.Instance.dialogueUI = GameObject.Find("DialogueUI");
-        DialogueManager.Instance.portrait = DialogueManager.Instance.dialogueUI.transform.GetChild(1).Find("Portrait").GetComponent<Image>();
-        DialogueManager.Instance.speakerName = DialogueManager.Instance.dialogueUI.transform.GetChild(1).Find("Name").GetComponent<TMP_Text>();
-        DialogueManager.Instance.nodeText = DialogueManager.Instance.dialogueUI.transform.GetChild(0).GetChild(0).Find("NodeText").GetComponent<TMP_Text>();
-        DialogueManager.Instance.nodeContentOrganizer = DialogueManager.Instance.dialogueUI.transform.GetChild(0).GetChild(0).Find("NodeContentOrganizer").gameObject;
+        DialogueUIData data = DialogueManager.Instance.dialogueUI.GetComponent<DialogueUIData>();
+        DialogueManager.Instance.portrait = data.portrait;
+        DialogueManager.Instance.speakerName = data.speakerName;
+        DialogueManager.Instance.nodeText = data.nodeText;
+        DialogueManager.Instance.nodeContentOrganizer = data.nodeContentOrganizer;
+       
     }
 
     public void AssignPartyUIToManager()
     {
         PartyManager.Instance.partyUI = GameObject.Find("PartyUI");
     }
+
+     
 }

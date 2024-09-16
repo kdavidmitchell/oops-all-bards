@@ -11,6 +11,12 @@ public class Status
         NONE,
         REQUIRES_ASSISTANCE,
         LEFT_HANGING,
+        JOYFUL,
+        PISSED,
+        UPSET,
+        CONFIDENT,
+        FOCUSED,
+        BORED
     }
 
     [SerializeField] private StatusTypes type;

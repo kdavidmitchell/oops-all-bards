@@ -18,7 +18,7 @@ public class LossManager : MonoBehaviour
 
     public void IncrementTavernVisits()
     {
-        DemoManager.Instance.IncrementTavernVisits();
+        GameManager.Instance.IncrementTavernVisits();
     }
 
     public void ToggleCombat()

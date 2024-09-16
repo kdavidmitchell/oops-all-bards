@@ -34,7 +34,7 @@ public class GameAgent_MentalStepExecute {
          }
          case 6: {
             // lookForAllyAgent_1Step5
-            System.out.println("Updating ally wme in dictionary.");
+            System.out.println("Updating ally wme in dictionary." + ((AllyWME)__$behaviorFrame[0]).getID());
             ((GameAgent)__$thisEntity).dict.addCharacter(((AllyWME)__$behaviorFrame[0]).getID() , ((AllyWME)__$behaviorFrame[0]));
             break;
          }
@@ -43,56 +43,66 @@ public class GameAgent_MentalStepExecute {
             ((__ValueTypes.IntVar)__$behaviorFrame[1]).i = ((AllyWME)__$behaviorFrame[0]).getID();
             break;
          }
-         case 13: {
+         case 14: {
             // manageCombat_1Step3
             System.out.println("Ally is in combat.");
             break;
          }
-         case 18: {
+         case 19: {
             // lookForAssistance_1Step2
             System.out.println("Ally is in need of assistance.");
             break;
          }
-         case 20: {
+         case 21: {
             // waitForTurn_1Step1
             System.out.println("I am waiting to take my turn.");
             break;
          }
-         case 22: {
+         case 23: {
             // lookToAssist_1Step1
             System.out.println("I am looking to assist.");
             __$behaviorFrame[2] = ((GameAgent)__$thisEntity).dict.getCharacter(((__ValueTypes.IntVar)__$behaviorFrame[0]).i);
             break;
          }
-         case 25: {
+         case 26: {
             // takeTurn_1Step1
             System.out.println("I am taking my turn.");
             break;
          }
-         case 26: {
+         case 27: {
             // assistAlly_1Step1
             ((__ValueTypes.IntVar)__$behaviorFrame[2]).i = ((AllyWME)__$behaviorFrame[0]).getID();
             ((__ValueTypes.IntVar)__$behaviorFrame[3]).i = ((AllyWME)__$behaviorFrame[1]).getID();
             System.out.println("I am assisting.");
             break;
          }
-         case 29: {
+         case 30: {
             // manageNoncombat_1Step2
             System.out.println("Ally is not in combat.");
             break;
          }
-         case 31: {
+         case 32: {
             // lookForQuip_1Step2
             __$behaviorFrame[1] = ((GameAgent)__$thisEntity).dict.getCharacter(((__ValueTypes.IntVar)__$behaviorFrame[0]).i);
             break;
          }
-         case 33: {
+         case 34: {
             // lookForQuip_1Step4
             ((__ValueTypes.BooleanVar)__$behaviorFrame[2]).b = ((AllyWME)__$behaviorFrame[1]).getInCombat();
             System.out.println("Starting quip.");
             break;
          }
-         case 35: {
+         case 37: {
+            // lookToGossip_1Step2
+            __$behaviorFrame[1] = ((GameAgent)__$thisEntity).dict.getCharacter(((__ValueTypes.IntVar)__$behaviorFrame[0]).i);
+            break;
+         }
+         case 39: {
+            // lookToGossip_1Step4
+            System.out.println("Look to gossip.");
+            break;
+         }
+         case 42: {
             // GameAgent_RootCollectionBehaviorStep1
             System.out.println("Starting game agent...");
             break;

@@ -9,8 +9,11 @@ public class ITargetable
     private int health;
     private int flourish;
     private int shield;
+    private int elan;
     private List<CombatStatus> combatStatuses = new List<CombatStatus>();
     private CiFData cifData = new CiFData();
+    private Animator anim;
+    private CombatAnimationManager animan;
 
     public virtual string Name
     {
@@ -36,6 +39,12 @@ public class ITargetable
         set { this.shield = value; }
     }
 
+    public virtual int Elan
+    {
+        get { return this.elan; }
+        set { this.elan = value; }
+    }
+
     public virtual List<CombatStatus> CombatStatuses
     {
         get { return this.combatStatuses; }
@@ -46,6 +55,18 @@ public class ITargetable
     {
         get { return this.cifData; }
         set { this.cifData = value; }
+    }
+
+    public virtual Animator Anim
+    {
+        get { return this.anim; }
+        set { this.anim = value; }
+    }
+
+    public virtual CombatAnimationManager Animan
+    {
+        get { return this.animan; }
+        set { this.animan = value; }
     }
 
     public virtual void RemoveCombatStatus(CombatStatus.CombatStatusTypes type)

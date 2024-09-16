@@ -31,6 +31,12 @@ public class WMEDictionary {
 		return this.map.get(key);
 	}
 	
+	public Integer[] getCharacters() {
+		Integer arr[] = new Integer[this.map.size()];
+		this.map.keySet().toArray(arr);
+		return arr;
+	}
+	
 	public boolean containsKey(int key) {
 		return this.map.containsKey(key);
 	}

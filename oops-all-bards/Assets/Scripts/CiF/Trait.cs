@@ -9,7 +9,35 @@ public class Trait
     {
         NONE,
         SARDONIC,
-        VENGEFUL
+        VENGEFUL,
+        FORGIVING,
+        TRUSTING,
+        DISTRUSTING,
+        EMOTIONAL,
+        STONIC,
+        GREEDY,
+        GENEROUS,
+        CONFORMIST,
+        INDIVIDUALIST,
+        VIOLENT,
+        PACIFIST,
+        OUTGOING,
+        RESERVED,
+        WITTY,
+        DULL,
+        KIND,
+        CRUEL,
+        CAREFUL,
+        CARELESS,
+        HONEST,
+        DECEITFUL,
+        DILIGENT,
+        LAZY,
+        ROBUST,
+        FRAIL,
+        CHATTY,
+        QUIET,
+        GENUINE
     }
 
     [SerializeField] private TraitTypes type;

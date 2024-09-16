@@ -17,10 +17,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GigDemo.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/CombatWin.unity
     guid: fe7e3e50c25ab614283cc434e02db435
   - enabled: 1
     path: Assets/Scenes/CombatLoss.unity
     guid: 37d5aa94c0a48be4dab86a6bbb8035d6
+  - enabled: 1
+    path: Assets/Scenes/VillageSample.unity
+    guid: c919e2e17846f42f29693308bc6a02a1
   m_configObjects: {}

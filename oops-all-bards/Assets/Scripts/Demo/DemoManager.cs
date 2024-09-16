@@ -10,10 +10,12 @@ public class DemoManager : MonoBehaviour
 {
     private static DemoManager _instance;
     public static DemoManager Instance => DemoManager._instance;
+
     public JSONReader jsonReader;
     public GameObject signpostContainer;
     public GameObject signpostPrefab;
-    public int tavernVisits = 1;
+    public GameObject firstFightTrigger;
+
     public bool hasAssistedOnce = false;
     public bool hasBeenProtectedOnce = false;
     public bool hasRequestAidOnce = false;
@@ -37,7 +39,8 @@ public class DemoManager : MonoBehaviour
         if (_instance == null)
         {
             _instance = this;
-        } else if (_instance != null)
+        }
+        else if (_instance != null)
         {
             Destroy(gameObject);
         }
@@ -47,111 +50,48 @@ public class DemoManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Subscribe to events that the demo manager should be aware of.
-        SubscribeToEvents();
         CreateSignpostMessage(help2);
         CreateSignpostMessage(help1);
-        // Add player to the party.
-        PartyManager.Instance.AddCharacterToParty(DataManager.Instance.PlayerData);
-        TCPTestClient.Instance.RefreshWMEs();
+
+        // Prevent the first fight being able to trigger without quinton in the party
+        firstFightTrigger.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
+      
         if (completedDemo)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                #if UNITY_EDITOR
+#if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
-                #else
+#else
                 Application.Quit();
-                #endif
+#endif
             }
         }
-    }
-
-    public List<BaseEnemy> GenerateEnemies()
-    {
-        List<BaseEnemy> enemies = new List<BaseEnemy>();
-        BaseEnemy enemy = new BaseEnemy("Devotee", 10, 5, 0, jsonReader.baseClasses.GetRandomClass());
-        enemies.Add(enemy);
-        enemy = new BaseEnemy("Fanatic", 10, 5, 0, jsonReader.baseClasses.GetRandomClass());
-        enemies.Add(enemy);
-        return enemies;
-    }
-
-    // A function used to debug the player object.
-    private void DebugPlayer(BasePlayer player)
-    {
-        Debug.Log(player.Name);
-        Debug.Log("FAME: " + player.Fame);
-        Debug.Log("GOLD: " + player.Gold);
-        Debug.Log(player.PlayerClass.Name);
-        foreach (BaseAbility ability in player.PlayerClass.Abilities)
-        {
-            Debug.Log(ability.Name + " " + ability.Damage + " " + ability.Cost);
-        }
-    }
-
-    // A function that uses the event management system to subscribe to events used in this manager.
-    private void SubscribeToEvents()
-    {
-        EventManager.Instance.SubscribeToEvent(EventType.CheckQueue, CheckQueue);
-        EventManager.Instance.SubscribeToEvent(EventType.AwaitPlayerInput, AwaitPlayerInput);
-        EventManager.Instance.SubscribeToEvent(EventType.CombatLoss, CombatLoss);
-        EventManager.Instance.SubscribeToEvent(EventType.CombatWin, CombatWin);
-    }
-
-    public void CheckQueue()
-    {
-        // Refresh WMEs every time we check the queue.
-        TCPTestClient.Instance.RefreshWMEs();
-        if (!CombatManager.Instance.combatQueue.IsEmpty())
-        {
-            ICombatQueueable cq = CombatManager.Instance.combatQueue.Pop();
-            cq.Execute();
-        } else 
-        {
-            Debug.Log("Combat round has ended. Resetting queue.");
-            CombatManager.Instance.rounds += 1;
-            CombatManager.Instance.InitCombatQueue(CombatManager.Instance.party, CombatManager.Instance.enemies);
-        }
-    }
-
-    // A function that enables player input when it is the player's turn in the combat queue.
-    private void AwaitPlayerInput()
-    {
-        Debug.Log("Awaiting player input...");
-    }
-
-    public void CombatWin()
-    {
-        PartyManager.Instance.ToggleInCombat(false);
-        LoadScene("CombatWin");
-    }
-
-    public void CombatLoss()
-    {
-        PartyManager.Instance.ToggleInCombat(false);
-        LoadScene("CombatLoss");
     }
 
     public void LoadScene(string sceneName)
     {
         // SceneManager.LoadScene(sceneName);
+        Destroy(firstFightTrigger); //prevents after fight bug
         BlackFade fader = GameObject.Find("BlackFade").GetComponent<BlackFade>();
         fader.FadeToLevel(sceneName);
     }
 
-    public void TogglePlayerControls()
+    public List<BaseEnemy> GenerateDemoEnemies()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        Camera camera = Camera.main;
-        player.GetComponent<PlayerController>().ToggleControls();
-        camera.GetComponent<CameraController>().ToggleControls();
+        List<BaseEnemy> enemies = new List<BaseEnemy>();
+        BaseEnemy enemy = new BaseEnemy("Devotee", 10, 5, 0, 2, jsonReader.baseClasses.GetRandomClass());
+        enemies.Add(enemy);
+        enemy = new BaseEnemy("Fanatic", 10, 5, 0, 2, jsonReader.baseClasses.GetRandomClass());
+        enemies.Add(enemy);
+        return enemies;
     }
+    
 
     public void RecruitQuinton()
     {
@@ -162,10 +102,12 @@ public class DemoManager : MonoBehaviour
         quinton.CiFData = new CiFData();
         quinton.CiFData.AddTrait(new Trait(Trait.TraitTypes.SARDONIC));
         quinton.CiFData.AddTrait(new Trait(Trait.TraitTypes.VENGEFUL));
-        quinton.CiFData.AddAffinity(new Affinity(0,5));
+        quinton.CiFData.AddAffinity(new Affinity(0, 5));
         PartyManager.Instance.AddCharacterToParty(quinton);
         TCPTestClient.Instance.RefreshWMEs();
         CreateSignpostMessage(help5);
+        //once quinton is in the party, let the next scene be able to be triggered
+        firstFightTrigger.SetActive(true);
     }
 
     public void DestroySignpostMessage(GameObject toDestroy)
@@ -175,22 +117,32 @@ public class DemoManager : MonoBehaviour
             if (child.gameObject == toDestroy)
             {
                 Destroy(child.gameObject);
+                
+            }
+
+            //Locks cursor when help messages are not shown
+            //Code also prevent premature locking if a help message is displayed during dialogue
+            if(GameObject.Find("SignpostContainer").transform.childCount == 1 && !DialogueManager.Instance.dialogueUI.activeInHierarchy)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                GameManager.Instance.TogglePlayerControls();
             }
         }
     }
 
     public void CreateSignpostMessage(string text)
     {
-        if (signpostContainer == null) { signpostContainer = GameObject.Find("SignpostContainer"); }
+        //StartCoroutine(togglePlayerPause());
+
+        if (signpostContainer == null)
+        { signpostContainer = GameObject.Find("SignpostContainer"); }
         GameObject toInstantiate = Instantiate(signpostPrefab, signpostContainer.transform.position, Quaternion.identity);
-        toInstantiate.transform.SetParent(signpostContainer.transform, true);
+        toInstantiate.transform.SetParent(signpostContainer.transform, false); 
         toInstantiate.transform.position = toInstantiate.transform.parent.position;
         toInstantiate.GetComponentInChildren<TMP_Text>().text = text;
+        GameManager.Instance.StartCoroutine(GameManager.togglePlayerPause());
         toInstantiate.GetComponentInChildren<Button>().onClick.AddListener(delegate { DestroySignpostMessage(toInstantiate); });
     }
+    
 
-    public void IncrementTavernVisits()
-    {
-        tavernVisits++;
-    }
 }

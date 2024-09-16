@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using UnityEngine;
+using DELP;
 
 public class TCPTestClient : MonoBehaviour {  	
 	#region private members 	
@@ -14,7 +15,8 @@ public class TCPTestClient : MonoBehaviour {
 	#endregion
 
 	private static TCPTestClient _instance;
-	public static TCPTestClient Instance => TCPTestClient._instance;  	
+	public static TCPTestClient Instance => TCPTestClient._instance;
+	[SerializeField] private bool isClientOnly;  	
 	
 	void Awake()
     {
@@ -25,7 +27,12 @@ public class TCPTestClient : MonoBehaviour {
         {
             Destroy(gameObject);
         }
-		ConnectToTcpServer();
+
+		if (!isClientOnly)
+		{
+			ConnectToTcpServer();
+		}
+
 		DontDestroyOnLoad(gameObject);
     }
 
@@ -53,7 +60,7 @@ public class TCPTestClient : MonoBehaviour {
 	/// </summary>     
 	private void ListenForData() { 		
 		try { 			
-			socketConnection = new TcpClient("localhost", 5000);  			
+			socketConnection = new TcpClient("localhost", 8000);  			
 			Byte[] bytes = new Byte[1024];             
 			while (true) { 				
 				// Get a stream object for reading 				
@@ -67,6 +74,15 @@ public class TCPTestClient : MonoBehaviour {
 
 						// TODO: ADD MROE DOCS
 						string result = System.Text.Encoding.UTF8.GetString(incomingData);
+						Debug.Log(result);
+						
+						if (result.Contains("answer"))
+						{
+							DELPResponse answer = JsonUtility.FromJson<DELPResponse>(result);
+							EventManager.Instance.InvokeEvent(EventType.DelpResponse, answer);
+							return;
+						}
+
 						ABLResponse response = JsonUtility.FromJson<ABLResponse>(result);
 						ActionManager.Instance.ParseData(response);
 					} 				
@@ -112,10 +128,9 @@ public class TCPTestClient : MonoBehaviour {
 		string data = JsonUtility.ToJson(allyWME);
 		Debug.Log(data);
 		// Prepare the message for ABL.
-		ABLMessage message = new ABLMessage();
-		message.code = 1;
-		message.msg = "AllyWME";
-		message.data = data;
+		int code = 1;
+		string msg = "AllyWME";
+		ABLMessage message = new ABLMessage(code, msg, data);
 		// Return message object.
 		return message;
 	}
